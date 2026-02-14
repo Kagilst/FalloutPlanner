@@ -1,0 +1,539 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Runtime.CompilerServices;
+
+namespace FalloutPlanner.Games.Fallout3
+{
+    public class Fallout3Character :INotifyPropertyChanged
+    {
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        private void OnPropertyChanged([CallerMemberName] string name = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+        }
+
+        private Stack<Fallout3CharacterStats> _history = new();
+
+        public Fallout3CharacterStats Current => _history.Peek();
+        
+        //Constructor
+
+        public Fallout3Character(Fallout3CharacterStats baseStats)
+        {
+            Strength = baseStats.Strength;
+            Perception = baseStats.Perception;
+            Endurance = baseStats.Endurance;
+            Charisma = baseStats.Charisma;
+            Intelligence = baseStats.Intelligence;
+            Agility = baseStats.Agility;
+            Luck = baseStats.Luck;
+            Points = baseStats.Points;
+
+            Barter = baseStats.Strength;
+            BigGuns = baseStats.Perception;
+            EnergyWeapons = baseStats.Endurance;
+            Explosives = baseStats.Charisma;
+            Lockpick = baseStats.Intelligence;
+            Medicine = baseStats.Agility;
+            MeleeWeapons = baseStats.Luck;
+            Repair = baseStats.Points;
+            Science = baseStats.Strength;
+            SmallGuns = baseStats.Perception;
+            Sneak = baseStats.Endurance;
+            Speech = baseStats.Charisma;
+            Unarmed = baseStats.Intelligence;
+
+            _history.Push(baseStats);
+            RecalculateDerivedStats();
+        }
+
+        //SPECIAL
+        public void ModifySpecial(string statName, int amount)
+        {
+            var property = GetType().GetProperty(statName);
+
+            if (property == null || property.PropertyType != typeof(int))
+                return;
+
+            int currentValue = (int)property.GetValue(this);
+            int newValue = currentValue + amount;
+
+            // SPECIAL range check
+            if (newValue < 1 || newValue > 10)
+                return;
+
+            // Remaining points check
+            if (amount > 0)
+            {
+                if (Points <= 0)
+                    return;
+
+                Points -= 1;
+            }
+            else // decreasing logic
+            {
+                Points += 1;
+            }
+
+            property.SetValue(this, newValue);
+
+            RecalculateDerivedStats();
+        }
+
+        //TAG logic
+        private HashSet<string> _taggedSkillNames = new();
+        public bool ModifyTaggedSkill(string skillName, bool isTagged)
+        {
+            if (isTagged)
+            {
+                if (_taggedSkillNames.Count >= 3)
+                    return false;
+
+                _taggedSkillNames.Add(skillName);
+            }
+            else
+            {
+                _taggedSkillNames.Remove(skillName);
+            }
+
+            RecalculateDerivedStats();
+            return true;
+        }
+
+        //SPECIAL
+
+        private int _strength = 5;
+        public int Strength
+        {
+            get => _strength;
+            set
+            {
+                _strength = value;
+                OnPropertyChanged();
+                RecalculateDerivedStats();
+            }
+        }
+
+        private int _perception = 5;
+        public int Perception
+        {
+            get => _perception;
+            set
+            {
+                _perception = value;
+                OnPropertyChanged();
+                RecalculateDerivedStats();
+            }
+        }
+
+        private int _endurance = 5;
+        public int Endurance
+        {
+            get => _endurance;
+            set
+            {
+                _endurance = value;
+                OnPropertyChanged();
+                RecalculateDerivedStats();
+            }
+        }
+
+        private int _charisma = 5;
+        public int Charisma
+        {
+            get => _charisma;
+            set
+            {
+                _charisma = value;
+                OnPropertyChanged();
+                RecalculateDerivedStats();
+            }
+        }
+
+        private int _intelligence = 5;
+        public int Intelligence
+        {
+            get => _intelligence;
+            set
+            {
+                _intelligence = value;
+                OnPropertyChanged();
+                RecalculateDerivedStats();
+            }
+        }
+
+        private int _agility = 5;
+        public int Agility
+        {
+            get => _agility;
+            set
+            {
+                _agility = value;
+                OnPropertyChanged();
+                RecalculateDerivedStats();
+            }
+        }
+
+        private int _luck = 5;
+        public int Luck
+        {
+            get => _luck;
+            set
+            {
+                _luck = value;
+                OnPropertyChanged();
+                RecalculateDerivedStats();
+            }
+        }
+
+        private int _points = 5;
+        public int Points
+        {
+            get => _points;
+            set
+            {
+                _points = value;
+                OnPropertyChanged();
+                RecalculateDerivedStats();
+            }
+        }
+
+        //Character STATS
+        private int _actionPoints;
+        public int ActionPoints
+        {
+            get => _actionPoints;
+            set
+            {
+                _actionPoints = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _health;
+        public int Health
+        {
+            get => _health;
+            set
+            {
+                _health = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _carryWeight;
+        public int CarryWeight
+        {
+            get => _carryWeight;
+            set
+            {
+                _carryWeight = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _criticalChance;
+        public int CriticalChance
+        {
+            get => _criticalChance;
+            set
+            {
+                _criticalChance = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _damageResist;
+        public int DamageResist
+        {
+            get => _damageResist;
+            set
+            {
+                _damageResist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _fireResist;
+        public int FireResist
+        {
+            get => _fireResist;
+            set
+            {
+                _fireResist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _poisonResist;
+        public int PoisonResist
+        {
+            get => _poisonResist;
+            set
+            {
+                _poisonResist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _radiationResist;
+        public int RadiationResist
+        {
+            get => _radiationResist;
+            set
+            {
+                _radiationResist = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private double _meleeDamage;
+        public double MeleeDamage
+        {
+            get => _meleeDamage;
+            set
+            {
+                _meleeDamage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _unarmedDamage;
+        public int UnarmedDamage
+        {
+            get => _unarmedDamage;
+            set
+            {
+                _unarmedDamage = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _skillPoints;
+        public int SkillPoints
+        {
+            get => _skillPoints;
+            set
+            {
+                _skillPoints = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _taggedSkills;
+        public int TaggedSkills
+        {
+            get => _taggedSkills;
+            set
+            {
+                _taggedSkills = value;
+                OnPropertyChanged();
+            }
+        }
+
+        //Character Skills
+        private int _barter;
+        public int Barter
+        {
+            get => _barter;
+            set
+            {
+                _barter = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _bigGuns;
+        public int BigGuns
+        {
+            get => _bigGuns;
+            set
+            {
+                _bigGuns = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _energyWeapons;
+        public int EnergyWeapons
+        {
+            get => _energyWeapons;
+            set
+            {
+                _energyWeapons = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _explosives;
+        public int Explosives
+        {
+            get => _explosives;
+            set
+            {
+                _explosives = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _lockpick;
+        public int Lockpick
+        {
+            get => _lockpick;
+            set
+            {
+                _lockpick = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _medicine;
+        public int Medicine
+        {
+            get => _medicine;
+            set
+            {
+                _medicine = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _meleeWeapons;
+        public int MeleeWeapons
+        {
+            get => _meleeWeapons;
+            set
+            {
+                _meleeWeapons = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _repair;
+        public int Repair
+        {
+            get => _repair;
+            set
+            {
+                _repair = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _science;
+        public int Science
+        {
+            get => _science;
+            set
+            {
+                _science = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _smallGuns;
+        public int SmallGuns
+        {
+            get => _smallGuns;
+            set
+            {
+                _smallGuns = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _sneak;
+        public int Sneak
+        {
+            get => _sneak;
+            set
+            {
+                _sneak = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _speech;
+        public int Speech
+        {
+            get => _speech;
+            set
+            {
+                _speech = value;
+                OnPropertyChanged();
+            }
+        }
+
+        private int _unarmed;
+        public int Unarmed
+        {
+            get => _unarmed;
+            set
+            {
+                _unarmed = value;
+                OnPropertyChanged();
+            }
+        }
+
+        //Special change calculations
+        private int CalculateSkill(int baseValue, string skillName)
+        {
+            if (_taggedSkillNames.Contains(skillName))
+                return baseValue + 15;
+
+            return baseValue;
+        }
+        private void RecalculateDerivedStats()
+        {
+            ActionPoints = 65 + (Agility * 2);
+            Health = 100 + (Endurance * 20);
+            CarryWeight = 150 + (Strength * 10);
+            MeleeDamage = (Strength * .5);
+            PoisonResist = ((Endurance - 1) * 5);
+            RadiationResist = ((Endurance - 1) * 2);           
+            CriticalChance = Luck;
+            SkillPoints = 10 + Intelligence;
+            Barter = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Charisma * 2), nameof(Barter));
+            BigGuns = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Endurance * 2), nameof(BigGuns));
+            EnergyWeapons = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Perception * 2), nameof(EnergyWeapons));
+            Explosives = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Perception * 2), nameof(Explosives));
+            Lockpick = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Perception * 2), nameof(Lockpick));
+            Medicine = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Intelligence * 2), nameof(Medicine));
+            MeleeWeapons = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Strength * 2), nameof(MeleeWeapons));
+            Repair = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Intelligence * 2), nameof(Repair));
+            Science = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Intelligence * 2), nameof(Science));
+            SmallGuns = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Agility * 2), nameof(SmallGuns));
+            Sneak = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Agility * 2), nameof(Sneak));
+            Speech = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Charisma * 2), nameof(Speech));
+            Unarmed = CalculateSkill(2 + (Luck / 2) + (Luck % 2) + (Endurance * 2), nameof(Unarmed));
+            UnarmedDamage = Unarmed switch
+            {
+                <= 10 => 1,
+                <= 30 => 2,
+                <= 50 => 3,
+                <= 70 => 4,
+                <= 90 => 5,
+                _ => 6
+            };
+        }
+
+        //Character Leveling
+        public void LevelUp(Action<Fallout3CharacterStats> applyChanges)
+        {
+            var newStats = Current.Clone();
+            applyChanges(newStats);
+            _history.Push(newStats);
+        }
+
+        public void UndoLevel()
+        {
+            if (_history.Count > 1)
+                _history.Pop();
+        }
+    }
+}

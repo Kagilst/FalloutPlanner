@@ -1,0 +1,22 @@
+<Page x:Class="FalloutPlanner.FalloutNVWindow"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Fallout NV">
+    <Grid Background="{DynamicResource FalloutBackgroundBrush}">
+        <!-- Back button -->
+        <Button Content="Back"
+                Margin="10"
+                Padding="10,5"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Click="BackButton_Click" />
+
+        <!-- Simple page label -->
+        <TextBlock Text="Fallout NV Page"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="24"
+                   FontWeight="Bold" />
+    </Grid>
+</Page>
+

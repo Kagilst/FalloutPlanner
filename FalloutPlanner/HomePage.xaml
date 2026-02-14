@@ -1,0 +1,43 @@
+<Page x:Class="FalloutPlanner.HomePage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Home">
+    <Grid Background="{DynamicResource FalloutBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+            <RowDefinition Height="0*"/>
+        </Grid.RowDefinitions>
+        <!-- Centered vertical stack of game buttons -->
+        <StackPanel HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical"
+                    Width="200" Height="250">
+            <Button Content="Fallout 1"
+                    Margin="0,5"
+                    Height="40"
+                    Style="{StaticResource BoxButtons}"
+                    Click="Fallout1Button_Click" />
+            <Button Content="Fallout 2"
+                    Margin="0,5"
+                    Height="40"
+                    Style="{StaticResource BoxButtons}"
+                    Click="Fallout2Button_Click" />
+            <Button Content="Fallout 3"
+                    Margin="0,5"
+                    Height="40"
+                    Style="{StaticResource BoxButtons}"
+                    Click="Fallout3Button_Click" />
+            <Button Content="Fallout NV"
+                    Margin="0,5"
+                    Height="40"
+                    Style="{StaticResource BoxButtons}"
+                    Click="FalloutNVButton_Click" />
+            <Button Content="Fallout 4"
+                    Margin="0,5"
+                    Height="40"
+                    Style="{StaticResource BoxButtons}"
+                    Click="Fallout4Button_Click" />
+        </StackPanel>
+    </Grid>
+</Page>
+

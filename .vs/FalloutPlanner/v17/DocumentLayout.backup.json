@@ -1,0 +1,103 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{BB7C3A52-3C72-4FED-A12B-D634D397DF9E}|FalloutPlanner\\FalloutPlanner.csproj|c:\\users\\kyle\\source\\repos\\falloutplanner\\falloutplanner\\games\\fallout3\\fallout3character.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BB7C3A52-3C72-4FED-A12B-D634D397DF9E}|FalloutPlanner\\FalloutPlanner.csproj|solutionrelative:falloutplanner\\games\\fallout3\\fallout3character.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BB7C3A52-3C72-4FED-A12B-D634D397DF9E}|FalloutPlanner\\FalloutPlanner.csproj|c:\\users\\kyle\\source\\repos\\falloutplanner\\falloutplanner\\games\\fallout3\\fallout3characterstats.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BB7C3A52-3C72-4FED-A12B-D634D397DF9E}|FalloutPlanner\\FalloutPlanner.csproj|solutionrelative:falloutplanner\\games\\fallout3\\fallout3characterstats.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BB7C3A52-3C72-4FED-A12B-D634D397DF9E}|FalloutPlanner\\FalloutPlanner.csproj|c:\\users\\kyle\\source\\repos\\falloutplanner\\falloutplanner\\games\\fallout3\\fallout3window.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{BB7C3A52-3C72-4FED-A12B-D634D397DF9E}|FalloutPlanner\\FalloutPlanner.csproj|solutionrelative:falloutplanner\\games\\fallout3\\fallout3window.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BB7C3A52-3C72-4FED-A12B-D634D397DF9E}|FalloutPlanner\\FalloutPlanner.csproj|c:\\users\\kyle\\source\\repos\\falloutplanner\\falloutplanner\\games\\fallout3\\fallout3window.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{BB7C3A52-3C72-4FED-A12B-D634D397DF9E}|FalloutPlanner\\FalloutPlanner.csproj|solutionrelative:falloutplanner\\games\\fallout3\\fallout3window.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{BB7C3A52-3C72-4FED-A12B-D634D397DF9E}|FalloutPlanner\\FalloutPlanner.csproj|c:\\users\\kyle\\source\\repos\\falloutplanner\\falloutplanner\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{BB7C3A52-3C72-4FED-A12B-D634D397DF9E}|FalloutPlanner\\FalloutPlanner.csproj|solutionrelative:falloutplanner\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 2,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "Fallout3Window.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\FalloutPlanner\\Games\\Fallout3\\Fallout3Window.xaml.cs",
+              "RelativeDocumentMoniker": "FalloutPlanner\\Games\\Fallout3\\Fallout3Window.xaml.cs",
+              "ToolTip": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\FalloutPlanner\\Games\\Fallout3\\Fallout3Window.xaml.cs",
+              "RelativeToolTip": "FalloutPlanner\\Games\\Fallout3\\Fallout3Window.xaml.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowB8AAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-13T00:23:59.444Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Fallout3Window.xaml",
+              "DocumentMoniker": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\FalloutPlanner\\Games\\Fallout3\\Fallout3Window.xaml",
+              "RelativeDocumentMoniker": "FalloutPlanner\\Games\\Fallout3\\Fallout3Window.xaml",
+              "ToolTip": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\FalloutPlanner\\Games\\Fallout3\\Fallout3Window.xaml",
+              "RelativeToolTip": "FalloutPlanner\\Games\\Fallout3\\Fallout3Window.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-02-13T18:15:41.825Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Fallout3Character.cs",
+              "DocumentMoniker": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\FalloutPlanner\\Games\\Fallout3\\Fallout3Character.cs",
+              "RelativeDocumentMoniker": "FalloutPlanner\\Games\\Fallout3\\Fallout3Character.cs",
+              "ToolTip": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\FalloutPlanner\\Games\\Fallout3\\Fallout3Character.cs",
+              "RelativeToolTip": "FalloutPlanner\\Games\\Fallout3\\Fallout3Character.cs",
+              "ViewState": "AgIAAOgBAAAAAAAAAAAcwAkCAAAOAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-13T18:11:54.916Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Fallout3CharacterStats.cs",
+              "DocumentMoniker": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\FalloutPlanner\\Games\\Fallout3\\Fallout3CharacterStats.cs",
+              "RelativeDocumentMoniker": "FalloutPlanner\\Games\\Fallout3\\Fallout3CharacterStats.cs",
+              "ToolTip": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\FalloutPlanner\\Games\\Fallout3\\Fallout3CharacterStats.cs",
+              "RelativeToolTip": "FalloutPlanner\\Games\\Fallout3\\Fallout3CharacterStats.cs",
+              "ViewState": "AgIAAC4AAAAAAAAAAAA6wBwAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-02-13T18:10:59.622Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\FalloutPlanner\\App.xaml",
+              "RelativeDocumentMoniker": "FalloutPlanner\\App.xaml",
+              "ToolTip": "C:\\Users\\Kyle\\source\\repos\\FalloutPlanner\\FalloutPlanner\\App.xaml",
+              "RelativeToolTip": "FalloutPlanner\\App.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-01-28T15:42:35.858Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
