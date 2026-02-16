@@ -30,16 +30,56 @@
             <Setter Property="FontWeight" Value="Bold" />
             <Setter Property="Cursor" Value="Hand" />
             <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Border"
+                        Background="{TemplateBinding Background}"
+                        BorderBrush="{TemplateBinding BorderBrush}"
+                        BorderThickness="{TemplateBinding BorderThickness}"
+                        Padding="3" CornerRadius="1"
+                        HorizontalAlignment="Stretch"
+                        VerticalAlignment="Stretch">
+                        <ContentPresenter
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        RecognizesAccessKey="True"/>
+                        </Border>
+
+                        <ControlTemplate.Triggers>
+
+                            <!-- Hover -->
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Border"
+                                Property="Background"
+                                Value="{StaticResource FalloutAccentBrush}" />
+                                <Setter Property="Foreground"
+                                Value="Black"/>
+                            </Trigger>
+
+                            <!-- Pressed -->
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Border"
+                                Property="Background"
+                                Value="{StaticResource FalloutAccentDarkBrush}" />
+                            </Trigger>
+
+                            <!-- Disabled -->
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter Property="Opacity" Value="0.5"/>
+                            </Trigger>
+
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
 
         <!-- Text styling -->
         <Style TargetType="TextBlock">
-            <Setter Property="Foreground"
-            Value="{Binding Foreground,
-                    RelativeSource={RelativeSource AncestorType=Control},
-                    FallbackValue={StaticResource FalloutTextBrush}}" />
+            <Setter Property="Foreground" Value="{StaticResource FalloutTextBrush}" />
         </Style>
-        
+
         <!-- Increase or Decrease button styling -->
         <Style TargetType="Button" x:Key="DecreaseIncreaseButton">
             <Setter Property="Background" Value="Transparent"/>

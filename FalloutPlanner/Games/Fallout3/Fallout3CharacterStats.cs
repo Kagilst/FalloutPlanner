@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace FalloutPlanner.Games.Fallout3
 {
@@ -19,6 +20,7 @@ namespace FalloutPlanner.Games.Fallout3
         public int Points { get; set; }
 
         // Misc Stats
+        public string CharacterName { get; set; }
         public int Level { get; set; }
         public int ActionPoints { get; set; }
         public int CarryWeight { get; set; }
@@ -51,6 +53,6 @@ namespace FalloutPlanner.Games.Fallout3
         public Fallout3CharacterStats Clone()
         {
             return (Fallout3CharacterStats)this.MemberwiseClone();
-        }
+        }       
     }
 }

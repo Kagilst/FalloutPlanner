@@ -1,0 +1,137 @@
+﻿<Page x:Class="FalloutPlanner.Games.Fallout3.Fallout3LevelPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Fallout 3 Level Page">
+
+    <Grid Background="{DynamicResource FalloutBackgroundBrush}" MinWidth="608" MinHeight="372">
+
+        <!-- Stats label top left -->
+        <TextBlock Text="Stats"
+                   Margin="30,10,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   FontSize="16"
+                   FontWeight="Bold" />
+
+        <!-- Green Frame -->
+        <Border Margin="30,31,30,41" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="5">
+            <Grid Margin="5" x:Name="StatsPanel" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+
+                <!-- 13 rows -->
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+
+                <!-- Columns including spacers -->
+                <Grid.ColumnDefinitions>
+                    <!-- SPECIAL Labels -->
+                    <ColumnDefinition Width="*" />
+                    <!-- SPECIAL Values -->
+                    <ColumnDefinition Width="Auto" />
+                    <!-- Spacer between SPECIAL and Stats -->
+                    <ColumnDefinition Width="20" />
+                    <!-- Character Stats Labels -->
+                    <ColumnDefinition Width="1*"/>
+                    <!-- Character Stats Values -->
+                    <ColumnDefinition Width="*" />
+                    <!-- Spacer between Stats and Skills -->
+                    <ColumnDefinition Width="20" />
+                    <!-- Skill Labels -->
+                    <ColumnDefinition Width="*" />
+                    <!-- Skill Values -->
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <!-- Column 0: SPECIAL Labels -->
+                <TextBlock Text="Strength:" Grid.Row="0" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Perception:" Grid.Row="1" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Endurance:" Grid.Row="2" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Charisma:" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Intelligence:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Agility:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Luck:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
+
+                <!-- Column 1: SPECIAL Values -->
+                <TextBlock Text="{Binding Strength}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="1"/>
+                <TextBlock Text="{Binding Perception}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="1"/>
+                <TextBlock Text="{Binding Endurance}" VerticalAlignment="Center" Grid.Row="2" Grid.Column="1"/>
+                <TextBlock Text="{Binding Charisma}" VerticalAlignment="Center" Grid.Row="3" Grid.Column="1"/>
+                <TextBlock Text="{Binding Intelligence}" VerticalAlignment="Center" Grid.Row="4" Grid.Column="1"/>
+                <TextBlock Text="{Binding Agility}" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1"/>
+                <TextBlock Text="{Binding Luck}" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1"/>
+
+                <!-- Column 3: Character Stats Labels -->
+                <TextBlock Text="Name:" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Level:" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Health:" Grid.Row="2" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Action Points:" Grid.Row="3" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Critical Chance:" Grid.Row="4" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Damage Resist:" Grid.Row="5" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Fire Resist:" Grid.Row="6" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Poison Resist:" Grid.Row="7" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Radiation Resist:" Grid.Row="8" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Melee Damage:" Grid.Row="9" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Unarmed Damage:" Grid.Row="10" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Carry Weight:" Grid.Row="11" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Skill Points:" Grid.Row="12" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
+
+                <!-- Column 4: Character Stats Values -->
+                <TextBlock Text="{Binding Name}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="4"/>
+                <TextBlock Text="{Binding Level}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="4"/>
+                <TextBlock Text="{Binding Health}" VerticalAlignment="Center" Grid.Row="2" Grid.Column="4"/>
+                <TextBlock Text="{Binding ActionPoints}" VerticalAlignment="Center" Grid.Row="3" Grid.Column="4"/>
+                <TextBlock Text="{Binding CriticalChance}" VerticalAlignment="Center" Grid.Row="4" Grid.Column="4"/>
+                <TextBlock Text="{Binding DamageResist}" VerticalAlignment="Center" Grid.Row="5" Grid.Column="4"/>
+                <TextBlock Text="{Binding FireResist}" VerticalAlignment="Center" Grid.Row="6" Grid.Column="4"/>
+                <TextBlock Text="{Binding PoisonResist}" VerticalAlignment="Center" Grid.Row="7" Grid.Column="4"/>
+                <TextBlock Text="{Binding RadiationResist}" VerticalAlignment="Center" Grid.Row="8" Grid.Column="4"/>
+                <TextBlock Text="{Binding MeleeDamage}" VerticalAlignment="Center" Grid.Row="9" Grid.Column="4"/>
+                <TextBlock Text="{Binding UnarmedDamage}" VerticalAlignment="Center" Grid.Row="10" Grid.Column="4"/>
+                <TextBlock Text="{Binding CarryWeight}" VerticalAlignment="Center" Grid.Row="11" Grid.Column="4"/>
+                <TextBlock Text="{Binding SkillPoints}" VerticalAlignment="Center" Grid.Row="12" Grid.Column="4"/>
+
+                <!-- Column 6: Skill Names -->
+                <TextBlock Text="Barter:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="0" Grid.Column="6"/>
+                <TextBlock Text="Big Guns:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="1" Grid.Column="6"/>
+                <TextBlock Text="Energy Weapons:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="2" Grid.Column="6"/>
+                <TextBlock Text="Explosives:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="3" Grid.Column="6"/>
+                <TextBlock Text="Lockpick:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="4" Grid.Column="6"/>
+                <TextBlock Text="Medicine:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="5" Grid.Column="6"/>
+                <TextBlock Text="Melee Weapons:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="6" Grid.Column="6"/>
+                <TextBlock Text="Repair:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="7" Grid.Column="6"/>
+                <TextBlock Text="Science:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="8" Grid.Column="6"/>
+                <TextBlock Text="Small Guns:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="9" Grid.Column="6"/>
+                <TextBlock Text="Sneak:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="10" Grid.Column="6"/>
+                <TextBlock Text="Speech:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="11" Grid.Column="6"/>
+                <TextBlock Text="Unarmed:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="12" Grid.Column="6"/>
+
+                <!-- Column 7: Skill Values -->
+                <TextBlock Text="{Binding Barter}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="7"/>
+                <TextBlock Text="{Binding BigGuns}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="7"/>
+                <TextBlock Text="{Binding EnergyWeapons}" VerticalAlignment="Center" Grid.Row="2" Grid.Column="7"/>
+                <TextBlock Text="{Binding Explosives}" VerticalAlignment="Center" Grid.Row="3" Grid.Column="7"/>
+                <TextBlock Text="{Binding Lockpick}" VerticalAlignment="Center" Grid.Row="4" Grid.Column="7"/>
+                <TextBlock Text="{Binding Medicine}" VerticalAlignment="Center" Grid.Row="5" Grid.Column="7"/>
+                <TextBlock Text="{Binding MeleeWeapons}" VerticalAlignment="Center" Grid.Row="6" Grid.Column="7"/>
+                <TextBlock Text="{Binding Repair}" VerticalAlignment="Center" Grid.Row="7" Grid.Column="7"/>
+                <TextBlock Text="{Binding Science}" VerticalAlignment="Center" Grid.Row="8" Grid.Column="7"/>
+                <TextBlock Text="{Binding SmallGuns}" VerticalAlignment="Center" Grid.Row="9" Grid.Column="7"/>
+                <TextBlock Text="{Binding Sneak}" VerticalAlignment="Center" Grid.Row="10" Grid.Column="7"/>
+                <TextBlock Text="{Binding Speech}" VerticalAlignment="Center" Grid.Row="11" Grid.Column="7"/>
+                <TextBlock Text="{Binding Unarmed}" VerticalAlignment="Center" Grid.Row="12" Grid.Column="7"/>
+            </Grid>
+        </Border>
+    </Grid>
+</Page>

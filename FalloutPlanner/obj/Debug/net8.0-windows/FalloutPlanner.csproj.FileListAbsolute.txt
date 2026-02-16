@@ -31,3 +31,8 @@ C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-window
 C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\Fallout3\Fallout3Window.g.cs
 C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\Fallout4\Fallout4Window.g.cs
 C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\FalloutNV\FalloutNVWindow.g.cs
+C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\FalloutPlanner.sourcelink.json
+C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\Fallout3\CharacterNameWindow.baml
+C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\Fallout3\CharacterNameWindow.g.cs
+C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\Fallout3\Fallout3LevelPage.g.cs
+C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\Fallout3\Fallout3LevelPage.baml

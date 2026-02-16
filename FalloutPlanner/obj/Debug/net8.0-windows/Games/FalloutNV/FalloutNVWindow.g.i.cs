@@ -52,7 +52,7 @@ namespace FalloutPlanner {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/FalloutPlanner;component/games/falloutnv/falloutnvwindow.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/FalloutPlanner;V1.0.0.0;component/games/falloutnv/falloutnvwindow.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\..\Games\FalloutNV\FalloutNVWindow.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

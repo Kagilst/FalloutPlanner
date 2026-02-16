@@ -72,7 +72,7 @@ public partial class Fallout3Window : Page
     //TAG button
     private void TagSkill_Toggled(object sender, RoutedEventArgs e)
     {
-        if (sender is ToggleButton toggle)
+        if (sender is ToggleButton toggle && toggle.Tag != null)
         {
             string skillName = toggle.Tag.ToString();
             bool isChecked = toggle.IsChecked == true;
@@ -81,9 +81,45 @@ public partial class Fallout3Window : Page
 
             if (!allowed)
             {
-                // Revert the toggle if limit reached
                 toggle.IsChecked = false;
+                return;
             }
+
+            UpdateToggleButtons();
+        }
+    }
+
+    private void UpdateToggleButtons()
+    {
+        int tagged = Character.TaggedSkills;
+
+        foreach (var child in SkillsPanel.Children) // assuming all toggles in a panel
+        {
+            if (child is ToggleButton tb && tb.IsChecked == false)
+            {
+                tb.IsEnabled = tagged < 3; // disable if already 3 tagged
+            }
+        }
+    }
+
+
+    private void CreateF3Char_Click(object sender, RoutedEventArgs e)
+    {
+        CharacterNameWindow nameWindow = new CharacterNameWindow();
+        nameWindow.Owner = Window.GetWindow(this);
+
+        bool? result = nameWindow.ShowDialog();
+
+        if (result == true)
+        {
+            
+            Character.Name = nameWindow.CharacterName;
+
+            
+            Character.SaveInitialState();
+
+            
+            NavigationService.Navigate(new Fallout3LevelPage(Character));
         }
     }
 }

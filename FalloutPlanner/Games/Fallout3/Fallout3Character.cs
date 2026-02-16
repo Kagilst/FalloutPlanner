@@ -20,8 +20,10 @@ namespace FalloutPlanner.Games.Fallout3
         private Stack<Fallout3CharacterStats> _history = new();
 
         public Fallout3CharacterStats Current => _history.Peek();
-        
+
         //Constructor
+        public string Name { get; set; }
+        public int Level { get; private set; } = 1;
 
         public Fallout3Character(Fallout3CharacterStats baseStats)
         {
@@ -50,6 +52,42 @@ namespace FalloutPlanner.Games.Fallout3
 
             _history.Push(baseStats);
             RecalculateDerivedStats();
+        }
+
+        public void SaveInitialState()
+        {
+            var snapshot = new Fallout3CharacterStats
+            {
+                // Not Derived Stats
+                Strength = Strength,
+                Perception = Perception,
+                Endurance = Endurance,
+                Charisma = Charisma,
+                Intelligence = Intelligence,
+                Agility = Agility,
+                Luck = Luck,
+                Points = Points,
+
+                CharacterName = Name,
+                Level = Level,
+                TaggedSkills = TaggedSkills,
+
+                Barter = Barter,
+                BigGuns = BigGuns,
+                EnergyWeapons = EnergyWeapons,
+                Explosives = Explosives,
+                Lockpick = Lockpick,
+                Medicine = Medicine,
+                MeleeWeapons = MeleeWeapons,
+                Repair = Repair,
+                Science = Science,
+                SmallGuns = SmallGuns,
+                Sneak = Sneak,
+                Speech = Speech,
+                Unarmed = Unarmed
+            };
+
+            _history.Push(snapshot);
         }
 
         //SPECIAL
@@ -87,22 +125,35 @@ namespace FalloutPlanner.Games.Fallout3
 
         //TAG logic
         private HashSet<string> _taggedSkillNames = new();
-        public bool ModifyTaggedSkill(string skillName, bool isTagged)
+        public bool ModifyTaggedSkill(string skillName, bool isToggled)
         {
-            if (isTagged)
-            {
-                if (_taggedSkillNames.Count >= 3)
-                    return false;
+            // Prevent toggling if already at 3 skills
+            if (isToggled && TaggedSkills >= 3)
+                return false; // 4th toggle not allowed
 
-                _taggedSkillNames.Add(skillName);
-            }
+            // Only update TaggedSkills if allowed
+            if (isToggled)
+                TaggedSkills++;
             else
+                TaggedSkills--;
+
+            // Update the actual skill value (+15 or -15)
+            var property = GetType().GetProperty(skillName);
+            if (property != null && property.PropertyType == typeof(int))
             {
-                _taggedSkillNames.Remove(skillName);
+                int currentValue = (int)property.GetValue(this);
+                int change = isToggled ? 15 : -15;
+                property.SetValue(this, currentValue + change);
+
+                // Notify UI of property change
+                OnPropertyChanged(skillName);
             }
 
-            RecalculateDerivedStats();
-            return true;
+            // Notify UI about TaggedSkills and confirm button
+            OnPropertyChanged(nameof(TaggedSkills));
+            OnPropertyChanged(nameof(CanConfirm));
+
+            return true; // toggle allowed
         }
 
         //SPECIAL
@@ -197,8 +248,12 @@ namespace FalloutPlanner.Games.Fallout3
             get => _points;
             set
             {
-                _points = value;
-                OnPropertyChanged();
+                if (_points != value)
+                {
+                    _points = value;
+                    OnPropertyChanged(nameof(Points));
+                    OnPropertyChanged(nameof(CanConfirm));
+                }
                 RecalculateDerivedStats();
             }
         }
@@ -331,8 +386,13 @@ namespace FalloutPlanner.Games.Fallout3
             get => _taggedSkills;
             set
             {
-                _taggedSkills = value;
-                OnPropertyChanged();
+                if (_taggedSkills != value)
+                {
+                    _taggedSkills = value;
+                    OnPropertyChanged(nameof(TaggedSkills));
+                    OnPropertyChanged(nameof(CanConfirm));
+                }
+                
             }
         }
 
@@ -521,6 +581,9 @@ namespace FalloutPlanner.Games.Fallout3
                 _ => 6
             };
         }
+
+        //Create Character Confirmation
+        public bool CanConfirm => Points == 0 && TaggedSkills == 3;
 
         //Character Leveling
         public void LevelUp(Action<Fallout3CharacterStats> applyChanges)

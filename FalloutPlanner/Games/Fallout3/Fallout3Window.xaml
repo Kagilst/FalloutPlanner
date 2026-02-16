@@ -16,7 +16,7 @@
 
         <!-- Green Frame -->
         <Border Margin="30,31,30,41" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="5">
-            <Grid Margin="5">
+            <Grid Margin="5" x:Name="SkillsPanel" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                 <!-- 13 rows -->
                 <Grid.RowDefinitions>
                     <RowDefinition Height="*"/>
@@ -33,7 +33,6 @@
                     <RowDefinition Height="*"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-
                 <!-- 9 columns -->
                 <Grid.ColumnDefinitions>
                     <!-- SPECIAL -->
@@ -174,6 +173,8 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Bottom"
                 Style="{StaticResource BoxButtons}"
-                Padding="12,4" />
+                Click="CreateF3Char_Click"
+                Padding="12,4" 
+                IsEnabled="{Binding CanConfirm}"/>
     </Grid>
 </Page>
