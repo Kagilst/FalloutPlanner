@@ -21,10 +21,132 @@ namespace FalloutPlanner.Games.Fallout3
 
         public Fallout3CharacterStats Current => _history.Peek();
 
+        //Skill Logic
+        private Dictionary<string, int> _skillIncreasesThisLevel = new();
+        public bool ModifySkill(string skillName, int amount)
+        {
+            var property = GetType().GetProperty(skillName);
+
+            if (property == null || property.PropertyType != typeof(int))
+                return false;
+
+            int currentValue = (int)property.GetValue(this);
+            int newValue = currentValue + amount;
+
+            // Increase
+            if (amount > 0)
+            {
+                if (SkillPoints <= 0 || currentValue >= 100)
+                    return false;
+
+                property.SetValue(this, Math.Min(newValue, 100));
+                SkillPoints--;
+
+                if (!_skillIncreasesThisLevel.ContainsKey(skillName))
+                    _skillIncreasesThisLevel[skillName] = 0;
+
+                _skillIncreasesThisLevel[skillName]++;
+
+                NotifySkillChanged(skillName);
+                return true;
+            }
+
+            // Decrease
+            if (amount < 0)
+            {
+                if (!_skillIncreasesThisLevel.ContainsKey(skillName) ||
+                    _skillIncreasesThisLevel[skillName] <= 0)
+                    return false;
+
+                property.SetValue(this, currentValue - 1);
+                SkillPoints++;
+                _skillIncreasesThisLevel[skillName]--;
+
+                NotifySkillChanged(skillName);
+                return true;
+            }
+
+            return false;
+        }
+
+        private void NotifySkillChanged(string skillName)
+        {
+            OnPropertyChanged(skillName);
+            OnPropertyChanged(nameof(SkillPoints));
+            OnPropertyChanged($"CanIncrease{skillName}");
+            OnPropertyChanged($"CanDecrease{skillName}");
+        }
+
+        public bool CanIncreaseSkill(string skillName)
+        {
+            var property = GetType().GetProperty(skillName);
+            if (property == null) return false;
+
+            int value = (int)property.GetValue(this);
+            return SkillPoints > 0 && value < 100;
+        }
+
+        public bool CanDecreaseSkill(string skillName)
+        {
+            return _skillIncreasesThisLevel.ContainsKey(skillName) &&
+                   _skillIncreasesThisLevel[skillName] > 0;
+        }
+
+        // Barter
+        public bool CanIncreaseBarter => CanIncreaseSkill(nameof(Barter));
+        public bool CanDecreaseBarter => CanDecreaseSkill(nameof(Barter));
+
+        // Big Guns
+        public bool CanIncreaseBigGuns => CanIncreaseSkill(nameof(BigGuns));
+        public bool CanDecreaseBigGuns => CanDecreaseSkill(nameof(BigGuns));
+
+        // Energy Weapons
+        public bool CanIncreaseEnergyWeapons => CanIncreaseSkill(nameof(EnergyWeapons));
+        public bool CanDecreaseEnergyWeapons => CanDecreaseSkill(nameof(EnergyWeapons));
+
+        // Explosives
+        public bool CanIncreaseExplosives => CanIncreaseSkill(nameof(Explosives));
+        public bool CanDecreaseExplosives => CanDecreaseSkill(nameof(Explosives));
+
+        // Lockpick
+        public bool CanIncreaseLockpick => CanIncreaseSkill(nameof(Lockpick));
+        public bool CanDecreaseLockpick => CanDecreaseSkill(nameof(Lockpick));
+
+        // Medicine
+        public bool CanIncreaseMedicine => CanIncreaseSkill(nameof(Medicine));
+        public bool CanDecreaseMedicine => CanDecreaseSkill(nameof(Medicine));
+
+        // Melee Weapons
+        public bool CanIncreaseMeleeWeapons => CanIncreaseSkill(nameof(MeleeWeapons));
+        public bool CanDecreaseMeleeWeapons => CanDecreaseSkill(nameof(MeleeWeapons));
+
+        // Repair
+        public bool CanIncreaseRepair => CanIncreaseSkill(nameof(Repair));
+        public bool CanDecreaseRepair => CanDecreaseSkill(nameof(Repair));
+
+        // Science
+        public bool CanIncreaseScience => CanIncreaseSkill(nameof(Science));
+        public bool CanDecreaseScience => CanDecreaseSkill(nameof(Science));
+
+        // Small Guns
+        public bool CanIncreaseSmallGuns => CanIncreaseSkill(nameof(SmallGuns));
+        public bool CanDecreaseSmallGuns => CanDecreaseSkill(nameof(SmallGuns));
+
+        // Sneak
+        public bool CanIncreaseSneak => CanIncreaseSkill(nameof(Sneak));
+        public bool CanDecreaseSneak => CanDecreaseSkill(nameof(Sneak));
+
+        // Speech
+        public bool CanIncreaseSpeech => CanIncreaseSkill(nameof(Speech));
+        public bool CanDecreaseSpeech => CanDecreaseSkill(nameof(Speech));
+
+        // Unarmed
+        public bool CanIncreaseUnarmed => CanIncreaseSkill(nameof(Unarmed));
+        public bool CanDecreaseUnarmed => CanDecreaseSkill(nameof(Unarmed));
+
         //Constructor
         public string Name { get; set; }
         public int Level { get; private set; } = 1;
-
         public Fallout3Character(Fallout3CharacterStats baseStats)
         {
             Strength = baseStats.Strength;

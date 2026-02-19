@@ -36,3 +36,5 @@ C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-window
 C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\Fallout3\CharacterNameWindow.g.cs
 C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\Fallout3\Fallout3LevelPage.g.cs
 C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\Fallout3\Fallout3LevelPage.baml
+C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\obj\Debug\net8.0-windows\Games\Fallout3\Fallout3Resources.baml

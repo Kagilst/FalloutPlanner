@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\Kyle\source\repos\FalloutPlanner\FalloutPlanner\App.xaml
-91229402702
+101354637161
 
 16-361413751
 1981839832580
-Games\Fallout1\Fallout1Window.xaml;Games\Fallout2\Fallout2Window.xaml;Games\Fallout3\CharacterNameWindow.xaml;Games\Fallout3\Fallout3LevelPage.xaml;Games\Fallout3\Fallout3Window.xaml;Games\Fallout4\Fallout4Window.xaml;Games\FalloutNV\FalloutNVWindow.xaml;HomePage.xaml;MainWindow.xaml;
+Games\Fallout1\Fallout1Window.xaml;Games\Fallout2\Fallout2Window.xaml;Games\Fallout3\CharacterNameWindow.xaml;Games\Fallout3\Fallout3LevelPage.xaml;Games\Fallout3\Fallout3Resources.xaml;Games\Fallout3\Fallout3Window.xaml;Games\Fallout4\Fallout4Window.xaml;Games\FalloutNV\FalloutNVWindow.xaml;HomePage.xaml;MainWindow.xaml;
 
 False
 

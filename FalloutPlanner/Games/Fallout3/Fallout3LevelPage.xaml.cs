@@ -20,10 +20,31 @@ namespace FalloutPlanner.Games.Fallout3
     /// </summary>
     public partial class Fallout3LevelPage : Page
     {
+        public Fallout3Character Character { get; }
         public Fallout3LevelPage(Fallout3Character character)
         {
             InitializeComponent();
+            Character = character;
             DataContext = character;
         }
+
+        private void IncreaseSkill_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                string skillName = btn.Tag.ToString();
+                Character.ModifySkill(skillName, 1);
+            }
+        }
+
+        private void DecreaseSkill_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                string skillName = btn.Tag.ToString();
+                Character.ModifySkill(skillName, -1);
+            }
+        }
     }
+
 }
