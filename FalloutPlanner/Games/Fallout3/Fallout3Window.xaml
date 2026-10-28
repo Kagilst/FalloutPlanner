@@ -72,7 +72,7 @@
                 <TextBlock Text="Intelligence:" Grid.Row="4" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="Agility:" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="Luck:" Grid.Row="6" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
-                <TextBlock Text="Points:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
+                <TextBlock Text="Special Points:" Grid.Row="7" Grid.Column="0" VerticalAlignment="Center" FontWeight="Bold"/>
                 <!-- Column 1 SPECIAL Decrease Buttons -->
                 <Button Content="-" Grid.Row="0" Grid.Column="1" Margin="5,0,5,0" Style="{StaticResource DecreaseIncreaseButton}" Tag="Strength" Click="ModifySpecial_Click"/>
                 <Button Content="-" Grid.Row="1" Grid.Column="1" Margin="5,0,5,0" Style="{StaticResource DecreaseIncreaseButton}" Tag="Perception" Click="ModifySpecial_Click"/>
@@ -122,7 +122,8 @@
                 <TextBlock Text="{Binding MeleeDamage}" VerticalAlignment="Center" Grid.Row="7" Grid.Column="5"/>
                 <TextBlock Text="{Binding UnarmedDamage}" VerticalAlignment="Center" Grid.Row="8" Grid.Column="5"/>
                 <TextBlock Text="{Binding CarryWeight}" VerticalAlignment="Center" Grid.Row="9" Grid.Column="5"/>
-                <TextBlock Text="{Binding SkillPoints}" VerticalAlignment="Center" Grid.Row="10" Grid.Column="5"/>
+                <!-- Shows points gained each level (10 + Intelligence) -->
+                <TextBlock Text="{Binding SkillPointsPerLevel}" VerticalAlignment="Center" Grid.Row="10" Grid.Column="5"/>
                 <TextBlock Text="{Binding TaggedSkills}" VerticalAlignment="Center" Grid.Row="11" Grid.Column="5"/>
                 <!-- Column 6 Character skills TAG/Toggle BUTTONS-->
                 <ToggleButton Tag="Barter" Style="{StaticResource TAG}" Grid.Row="0" Grid.Column="6" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>

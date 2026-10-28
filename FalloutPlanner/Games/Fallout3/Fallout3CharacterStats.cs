@@ -25,14 +25,14 @@ namespace FalloutPlanner.Games.Fallout3
         public int ActionPoints { get; set; }
         public int CarryWeight { get; set; }
         public double CriticalChance { get; set; }
-        public double DamageResist { get; set; }
+        public int DamageResist { get; set; }
         public int FireResist { get; set; }
         public int PoisonResist { get; set; }
         public int RadiationResist { get; set; }
         public int Health { get; set; }
         public double MeleeDamage { get; set; }
         public int UnarmedDamage { get; set; }
-        public double SkillPoints { get; set; }
+        public int SkillPoints { get; set; }
         public int TaggedSkills { get; set; }
 
         // Skills
@@ -49,6 +49,7 @@ namespace FalloutPlanner.Games.Fallout3
         public int Sneak { get; set; }
         public int Speech { get; set; }
         public int Unarmed { get; set; }
+        public List<string> Perks { get; set; }
 
         public Fallout3CharacterStats Clone()
         {

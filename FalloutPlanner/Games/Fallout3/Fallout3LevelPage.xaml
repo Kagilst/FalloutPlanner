@@ -91,6 +91,44 @@
                 <TextBlock Text="{Binding Agility}" VerticalAlignment="Center" Grid.Row="5" Grid.Column="1"/>
                 <TextBlock Text="{Binding Luck}" VerticalAlignment="Center" Grid.Row="6" Grid.Column="1"/>
 
+                <!-- Action history under SPECIAL -->
+                <Border Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" Grid.RowSpan="6"
+                        BorderBrush="{DynamicResource FalloutAccentBrush}"
+                        BorderThickness="1"
+                        Margin="0,6,8,0"
+                        Padding="4">
+                    <DockPanel>
+                        <TextBlock DockPanel.Dock="Top"
+                                   Text="History"
+                                   FontWeight="Bold"
+                                   Foreground="{DynamicResource FalloutAccentBrush}"
+                                   Margin="0,0,0,4" />
+                        <ListBox ItemsSource="{Binding ActionLog}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="{DynamicResource FalloutTextBrush}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 FontSize="11">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="2,1" />
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <TextBlock Text="{Binding}"
+                                                           TextWrapping="Wrap"
+                                                           Foreground="{DynamicResource FalloutTextBrush}" />
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </DockPanel>
+                </Border>
+
                 <!-- Column 3: Character Stats Labels -->
                 <TextBlock Text="Name:" Grid.Row="0" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
                 <TextBlock Text="Level:" Grid.Row="1" Grid.Column="3" VerticalAlignment="Center" FontWeight="Bold"/>
@@ -119,6 +157,7 @@
                 <TextBlock Text="{Binding MeleeDamage}" VerticalAlignment="Center" Grid.Row="9" Grid.Column="4"/>
                 <TextBlock Text="{Binding UnarmedDamage}" VerticalAlignment="Center" Grid.Row="10" Grid.Column="4"/>
                 <TextBlock Text="{Binding CarryWeight}" VerticalAlignment="Center" Grid.Row="11" Grid.Column="4"/>
+                <!-- Remaining points to spend this level (set to SkillPointsPerLevel on each level-up) -->
                 <TextBlock Text="{Binding SkillPoints}" VerticalAlignment="Center" Grid.Row="12" Grid.Column="4"/>
 
                 <!-- Column 6: Skill Names -->
@@ -135,20 +174,20 @@
                 <TextBlock Text="Sneak:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="10" Grid.Column="6"/>
                 <TextBlock Text="Speech:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="11" Grid.Column="6"/>
                 <TextBlock Text="Unarmed:" VerticalAlignment="Center" FontWeight="Bold" Grid.Row="12" Grid.Column="6"/>
-                <!--Decrease skill Buttons-->
-                <Button Grid.Row="0" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Barter" Visibility="{Binding CanDecreaseBarter, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="1" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="BigGuns" Visibility="{Binding CanDecreaseBigGuns, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="2" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="EnergyWeapons" Visibility="{Binding CanDecreaseEnergyWeapons, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="3" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Explosives" Visibility="{Binding CanDecreaseExplosives, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="4" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Lockpick" Visibility="{Binding CanDecreaseLockpick, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="5" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Medicine" Visibility="{Binding CanDecreaseMedicine, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="6" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="MeleeWeapons" Visibility="{Binding CanDecreaseMeleeWeapons, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="7" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Repair" Visibility="{Binding CanDecreaseRepair, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="8" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Science" Visibility="{Binding CanDecreaseScience, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="9" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="SmallGuns" Visibility="{Binding CanDecreaseSmallGuns, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="10" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Sneak" Visibility="{Binding CanDecreaseSneak, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="11" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Speech" Visibility="{Binding CanDecreaseSpeech, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="12" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Unarmed" Visibility="{Binding CanDecreaseUnarmed, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
+                <!-- Decrease skill buttons (always visible; enabled only when that skill was increased this level) -->
+                <Button Grid.Row="0" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Barter" IsEnabled="{Binding CanDecreaseBarter}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="1" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="BigGuns" IsEnabled="{Binding CanDecreaseBigGuns}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="2" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="EnergyWeapons" IsEnabled="{Binding CanDecreaseEnergyWeapons}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="3" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Explosives" IsEnabled="{Binding CanDecreaseExplosives}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="4" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Lockpick" IsEnabled="{Binding CanDecreaseLockpick}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="5" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Medicine" IsEnabled="{Binding CanDecreaseMedicine}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="6" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="MeleeWeapons" IsEnabled="{Binding CanDecreaseMeleeWeapons}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="7" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Repair" IsEnabled="{Binding CanDecreaseRepair}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="8" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Science" IsEnabled="{Binding CanDecreaseScience}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="9" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="SmallGuns" IsEnabled="{Binding CanDecreaseSmallGuns}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="10" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Sneak" IsEnabled="{Binding CanDecreaseSneak}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="11" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Speech" IsEnabled="{Binding CanDecreaseSpeech}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="12" Grid.Column="7" Content="-" Width="25" Click="DecreaseSkill_Click" Tag="Unarmed" IsEnabled="{Binding CanDecreaseUnarmed}" Style="{StaticResource SkillAdjustButton}"/>
                 <!-- Column 8: Skill Values -->
                 <TextBlock Text="{Binding Barter}" VerticalAlignment="Center" Grid.Row="0" Grid.Column="8"/>
                 <TextBlock Text="{Binding BigGuns}" VerticalAlignment="Center" Grid.Row="1" Grid.Column="8"/>
@@ -163,20 +202,20 @@
                 <TextBlock Text="{Binding Sneak}" VerticalAlignment="Center" Grid.Row="10" Grid.Column="8"/>
                 <TextBlock Text="{Binding Speech}" VerticalAlignment="Center" Grid.Row="11" Grid.Column="8"/>
                 <TextBlock Text="{Binding Unarmed}" VerticalAlignment="Center" Grid.Row="12" Grid.Column="8"/>
-                <!--Increase skill Buttons-->
-                <Button Grid.Row="0" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Barter" Visibility="{Binding CanIncreaseBarter, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="1" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="BigGuns" Visibility="{Binding CanIncreaseBigGuns, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="2" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="EnergyWeapons" Visibility="{Binding CanIncreaseEnergyWeapons, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="3" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Explosives" Visibility="{Binding CanIncreaseExplosives, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="4" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Lockpick" Visibility="{Binding CanIncreaseLockpick, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="5" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Medicine" Visibility="{Binding CanIncreaseMedicine, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="6" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="MeleeWeapons" Visibility="{Binding CanIncreaseMeleeWeapons, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="7" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Repair" Visibility="{Binding CanIncreaseRepair, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="8" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Science" Visibility="{Binding CanIncreaseScience, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="9" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="SmallGuns" Visibility="{Binding CanIncreaseSmallGuns, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="10" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Sneak" Visibility="{Binding CanIncreaseSneak, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="11" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Speech" Visibility="{Binding CanIncreaseSpeech, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
-                <Button Grid.Row="12" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Unarmed" Visibility="{Binding CanIncreaseUnarmed, Converter={StaticResource BoolToVisibilityConverter}}" Style="{StaticResource SkillAdjustButton}"/>
+                <!-- Increase skill buttons (always visible; enabled when skill points remain) -->
+                <Button Grid.Row="0" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Barter" IsEnabled="{Binding CanIncreaseBarter}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="1" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="BigGuns" IsEnabled="{Binding CanIncreaseBigGuns}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="2" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="EnergyWeapons" IsEnabled="{Binding CanIncreaseEnergyWeapons}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="3" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Explosives" IsEnabled="{Binding CanIncreaseExplosives}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="4" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Lockpick" IsEnabled="{Binding CanIncreaseLockpick}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="5" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Medicine" IsEnabled="{Binding CanIncreaseMedicine}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="6" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="MeleeWeapons" IsEnabled="{Binding CanIncreaseMeleeWeapons}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="7" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Repair" IsEnabled="{Binding CanIncreaseRepair}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="8" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Science" IsEnabled="{Binding CanIncreaseScience}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="9" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="SmallGuns" IsEnabled="{Binding CanIncreaseSmallGuns}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="10" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Sneak" IsEnabled="{Binding CanIncreaseSneak}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="11" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Speech" IsEnabled="{Binding CanIncreaseSpeech}" Style="{StaticResource SkillAdjustButton}"/>
+                <Button Grid.Row="12" Grid.Column="9" Content="+" Width="25" Click="IncreaseSkill_Click" Tag="Unarmed" IsEnabled="{Binding CanIncreaseUnarmed}" Style="{StaticResource SkillAdjustButton}"/>
             </Grid>
         </Border>
         
@@ -196,32 +235,39 @@
             <Button Grid.Column="0"
             Content="Undo"
             Margin="5"
-            Style="{StaticResource BoxButtons}" />
+            Style="{StaticResource BoxButtons}"
+            Click="Undo_Click" />
 
             <Button Grid.Column="1"
-            Content="Redo"
+            Content="Equipment"
             Margin="5"
-            Style="{StaticResource BoxButtons}" />
+            Style="{StaticResource BoxButtons}"
+            Click="Equipment_Click" />
 
             <Button Grid.Column="2"
             Content="Bobbleheads"
             Margin="5"
-            Style="{StaticResource BoxButtons}" />
+            Style="{StaticResource BoxButtons}"
+            Click="Bobbleheads_Click" />
 
             <Button Grid.Column="3"
             Content="Skill Books"
             Margin="5"
-            Style="{StaticResource BoxButtons}" />
+            Style="{StaticResource BoxButtons}"
+            Click="SkillBooks_Click" />
 
             <Button Grid.Column="4"
             Content="Perks"
             Margin="5"
-            Style="{StaticResource BoxButtons}" />
+            Style="{StaticResource BoxButtons}"
+            Click="Perks_Click" />
 
             <Button Grid.Column="5"
             Content="Level Up"
             Margin="5"
-            Style="{StaticResource BoxButtons}" />
+            Style="{StaticResource BoxButtons}"
+            IsEnabled="{Binding CanLevelUp}"
+            Click="LevelUp_Click"/>
         </Grid>
 
     </Grid>

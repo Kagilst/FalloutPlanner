@@ -1,0 +1,37 @@
+<Window x:Class="FalloutPlanner.Games.Fallout3.EquipmentConflictWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Equipment Conflict"
+        Height="240"
+        Width="420"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{DynamicResource FalloutBackgroundBrush}"
+        Foreground="{DynamicResource FalloutTextBrush}"
+        FontFamily="Consolas">
+
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock x:Name="MessageText"
+                   TextWrapping="Wrap"
+                   VerticalAlignment="Center" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+            <Button Content="Accept"
+                    Width="100"
+                    Height="32"
+                    Margin="0,0,8,0"
+                    Style="{StaticResource BoxButtons}"
+                    Click="Accept_Click" />
+            <Button Content="Cancel"
+                    Width="100"
+                    Height="32"
+                    Style="{StaticResource BoxButtons}"
+                    Click="Cancel_Click" />
+        </StackPanel>
+    </Grid>
+</Window>
