@@ -1,0 +1,144 @@
+<Window x:Class="FalloutPlanner.Games.Fallout4.Fallout4OwnedPerksWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Perks"
+        Height="520"
+        Width="960"
+        WindowStartupLocation="CenterOwner"
+        Background="{DynamicResource FalloutBackgroundBrush}"
+        Foreground="{DynamicResource FalloutTextBrush}"
+        FontFamily="Consolas">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Fallout4Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <Style x:Key="PerkListBox" TargetType="ListBox">
+                <Setter Property="Background" Value="{DynamicResource FalloutPanelBrush}" />
+                <Setter Property="BorderBrush" Value="{DynamicResource FalloutBorderBrush}" />
+                <Setter Property="BorderThickness" Value="0" />
+                <Setter Property="Foreground" Value="{DynamicResource FalloutTextBrush}" />
+            </Style>
+
+            <Style x:Key="PerkListBoxItem" TargetType="ListBoxItem">
+                <Setter Property="Padding" Value="6,4" />
+                <Setter Property="Foreground" Value="{DynamicResource FalloutTextBrush}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="ListBoxItem">
+                            <Border x:Name="Bd" Background="Transparent" Padding="{TemplateBinding Padding}">
+                                <ContentPresenter />
+                            </Border>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter TargetName="Bd" Property="Background" Value="#0E2A33" />
+                                </Trigger>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter TargetName="Bd" Property="Background" Value="{DynamicResource FalloutAccentDarkBrush}" />
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="1.4*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="8" Margin="0,0,8,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Owned Perks" FontSize="16" FontWeight="Bold"
+                               Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,8"/>
+                    <ListBox x:Name="OwnedList" Grid.Row="1"
+                             ItemsSource="{Binding OwnedPerks}"
+                             SelectedItem="{Binding SelectedOwnedPerk}"
+                             Style="{StaticResource PerkListBox}"
+                             ItemContainerStyle="{StaticResource PerkListBoxItem}"
+                             DisplayMemberPath="DisplayName"
+                             SelectionChanged="OwnedList_SelectionChanged"/>
+                    <TextBlock Grid.Row="1" Text="No perks owned yet."
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Visibility="{Binding ShowOwnedEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="1" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="8" Margin="0,0,8,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="Misc Perks" FontSize="16" FontWeight="Bold"
+                               Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,8"/>
+                    <ListBox x:Name="MiscList" Grid.Row="1"
+                             ItemsSource="{Binding MiscPerks}"
+                             SelectedItem="{Binding SelectedMiscPerk}"
+                             Style="{StaticResource PerkListBox}"
+                             ItemContainerStyle="{StaticResource PerkListBoxItem}"
+                             DisplayMemberPath="DisplayName"
+                             SelectionChanged="MiscList_SelectionChanged"/>
+                    <TextBlock Grid.Row="1" Text="None available."
+                               HorizontalAlignment="Center" VerticalAlignment="Center"
+                               Visibility="{Binding ShowMiscEmpty, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </Grid>
+            </Border>
+
+            <Border Grid.Column="2" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <StackPanel>
+                            <TextBlock Text="{Binding DetailTitle}" FontSize="16" FontWeight="Bold"
+                                       Foreground="{DynamicResource FalloutAccentBrush}" TextWrapping="Wrap"/>
+                            <TextBlock Text="Type:" Margin="0,12,0,4" FontWeight="Bold"
+                                       Foreground="{DynamicResource FalloutAccentBrush}"
+                                       Visibility="{Binding ShowRequirements, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <TextBlock Text="{Binding SelectedRequirements}" TextWrapping="Wrap"
+                                       Visibility="{Binding ShowRequirements, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <TextBlock Text="Ranks:" Margin="0,12,0,4" FontWeight="Bold"
+                                       Foreground="{DynamicResource FalloutAccentBrush}"
+                                       Visibility="{Binding ShowRanks, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <TextBlock Text="{Binding SelectedRanks}"
+                                       Visibility="{Binding ShowRanks, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                            <TextBlock Text="Description:" Margin="0,12,0,4" FontWeight="Bold"
+                                       Foreground="{DynamicResource FalloutAccentBrush}"/>
+                            <TextBlock Text="{Binding SelectedDescription}" TextWrapping="Wrap"/>
+                            <TextBlock Text="{Binding ExclusionNote}" Margin="0,12,0,0" FontSize="11"
+                                       Opacity="0.85" TextWrapping="Wrap"
+                                       Visibility="{Binding ShowExclusionNote, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                        </StackPanel>
+                    </ScrollViewer>
+                    <Button Grid.Row="1" Content="Take Perk" Margin="0,12,0,0" Height="35"
+                            Style="{StaticResource BoxButtons}"
+                            Visibility="{Binding CanTakeSelectedMisc, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Click="TakeMiscPerk_Click"/>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Button Grid.Row="1" Content="Back" Margin="0,12,0,0" Height="35"
+                HorizontalAlignment="Left" Width="100"
+                Style="{StaticResource BoxButtons}" Click="Back_Click"/>
+    </Grid>
+</Window>

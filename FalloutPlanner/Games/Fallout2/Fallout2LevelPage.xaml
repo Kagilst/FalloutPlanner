@@ -1,0 +1,252 @@
+<Page x:Class="FalloutPlanner.Games.Fallout2.Fallout2LevelPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      Title="Fallout 2 Level Page">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Fallout2Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid Background="{DynamicResource FalloutBackgroundBrush}" MinWidth="720" MinHeight="500">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Text="Character Sheet"
+                   Margin="30,10,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   FontSize="16"
+                   FontWeight="Bold"
+                   Foreground="{StaticResource FalloutAccentBrush}"/>
+
+        <!-- Main Frame -->
+        <Border Margin="30,35,30,10" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="8" Grid.Row="0">
+            <Grid x:Name="StatsPanel">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- SPECIAL and Info Panel -->
+                <StackPanel Grid.Column="0" Margin="0,0,15,0">
+                    <TextBlock Text="Character Info" FontWeight="Bold" Foreground="{StaticResource FalloutAccentBrush}" Margin="0,0,0,5"/>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="80"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Name:" FontWeight="Bold"/><TextBlock Text="{Binding Name}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="80"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Level:" FontWeight="Bold"/><TextBlock Text="{Binding Level}" Grid.Column="1"/></Grid>
+
+                    <TextBlock Text="SPECIAL" FontWeight="Bold" Foreground="{StaticResource FalloutAccentBrush}" Margin="0,10,0,5"/>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="30"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Strength:" FontWeight="Bold"/><TextBlock Text="{Binding Strength}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="30"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Perception:" FontWeight="Bold"/><TextBlock Text="{Binding Perception}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="30"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Endurance:" FontWeight="Bold"/><TextBlock Text="{Binding Endurance}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="30"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Charisma:" FontWeight="Bold"/><TextBlock Text="{Binding Charisma}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="30"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Intelligence:" FontWeight="Bold"/><TextBlock Text="{Binding Intelligence}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="30"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Agility:" FontWeight="Bold"/><TextBlock Text="{Binding Agility}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="80"/><ColumnDefinition Width="30"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Luck:" FontWeight="Bold"/><TextBlock Text="{Binding Luck}" Grid.Column="1"/></Grid>
+
+                    <!-- History Log -->
+                    <TextBlock Text="History" FontWeight="Bold" Foreground="{StaticResource FalloutAccentBrush}" Margin="0,10,0,5"/>
+                    <Border BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="1" Height="120" Padding="4">
+                        <ListBox ItemsSource="{Binding ActionLog}"
+                                 Background="Transparent"
+                                 BorderThickness="0"
+                                 Foreground="{DynamicResource FalloutTextBrush}"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 FontSize="10">
+                            <ListBox.ItemContainerStyle>
+                                <Style TargetType="ListBoxItem">
+                                    <Setter Property="Padding" Value="2,1"/>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="ListBoxItem">
+                                                <TextBlock Text="{Binding}" TextWrapping="Wrap" Foreground="{DynamicResource FalloutTextBrush}"/>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </ListBox.ItemContainerStyle>
+                        </ListBox>
+                    </Border>
+                </StackPanel>
+
+                <!-- Derived Stats Panel -->
+                <StackPanel Grid.Column="1" Margin="15,0">
+                    <TextBlock Text="Derived Stats" FontWeight="Bold" Foreground="{StaticResource FalloutAccentBrush}" Margin="0,0,0,5"/>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Hit Points:" FontWeight="Bold"/><TextBlock Text="{Binding MaxHitPoints}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Action Pts:" FontWeight="Bold"/><TextBlock Text="{Binding ActionPoints}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Armor Class:" FontWeight="Bold"/><TextBlock Text="{Binding ArmorClass}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Melee Dmg:" FontWeight="Bold"/><TextBlock Text="{Binding MeleeDamage}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Carry Wgt:" FontWeight="Bold"/><TextBlock Text="{Binding CarryWeight}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Sequence:" FontWeight="Bold"/><TextBlock Text="{Binding Sequence}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Heal Rate:" FontWeight="Bold"/><TextBlock Text="{Binding HealingRate}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Crit Chance:" FontWeight="Bold"/><TextBlock Text="{Binding CriticalChance, StringFormat={}{0}%}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Poison Res:" FontWeight="Bold"/><TextBlock Text="{Binding PoisonResist, StringFormat={}{0}%}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Rad Res:" FontWeight="Bold"/><TextBlock Text="{Binding RadiationResist, StringFormat={}{0}%}" Grid.Column="1"/></Grid>
+                    <Grid Margin="0,8,0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="50"/></Grid.ColumnDefinitions>
+                        <TextBlock Text="Skill Points:" FontWeight="Bold" Foreground="{StaticResource FalloutAccentBrush}"/><TextBlock Text="{Binding SkillPoints}" Grid.Column="1" Foreground="{StaticResource FalloutAccentBrush}"/></Grid>
+                </StackPanel>
+
+                <!-- Skills Panel -->
+                <Grid Grid.Column="2" Margin="15,0,0,0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    
+                    <TextBlock Text="Skills" FontWeight="Bold" Foreground="{StaticResource FalloutAccentBrush}" Margin="0,0,0,5"/>
+                    
+                    <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+                        <Grid x:Name="SkillsGrid">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <!-- Left Column -->
+                            <StackPanel Grid.Column="0">
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Small Guns:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="SmallGuns" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseSmallGuns}"/>
+                                    <TextBlock Text="{Binding SmallGuns, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="SmallGuns" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseSmallGuns}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Big Guns:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="BigGuns" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseBigGuns}"/>
+                                    <TextBlock Text="{Binding BigGuns, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="BigGuns" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseBigGuns}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Energy:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="EnergyWeapons" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseEnergyWeapons}"/>
+                                    <TextBlock Text="{Binding EnergyWeapons, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="EnergyWeapons" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseEnergyWeapons}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Unarmed:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Unarmed" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseUnarmed}"/>
+                                    <TextBlock Text="{Binding Unarmed, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Unarmed" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseUnarmed}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Melee:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="MeleeWeapons" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseMeleeWeapons}"/>
+                                    <TextBlock Text="{Binding MeleeWeapons, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="MeleeWeapons" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseMeleeWeapons}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Throwing:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Throwing" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseThrowing}"/>
+                                    <TextBlock Text="{Binding Throwing, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Throwing" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseThrowing}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="First Aid:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="FirstAid" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseFirstAid}"/>
+                                    <TextBlock Text="{Binding FirstAid, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="FirstAid" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseFirstAid}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Doctor:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Doctor" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseDoctor}"/>
+                                    <TextBlock Text="{Binding Doctor, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Doctor" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseDoctor}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Sneak:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Sneak" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseSneak}"/>
+                                    <TextBlock Text="{Binding Sneak, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Sneak" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseSneak}"/></Grid>
+                            </StackPanel>
+                            
+                            <!-- Right Column -->
+                            <StackPanel Grid.Column="1">
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Lockpick:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Lockpick" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseLockpick}"/>
+                                    <TextBlock Text="{Binding Lockpick, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Lockpick" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseLockpick}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Steal:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Steal" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseSteal}"/>
+                                    <TextBlock Text="{Binding Steal, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Steal" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseSteal}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Traps:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Traps" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseTraps}"/>
+                                    <TextBlock Text="{Binding Traps, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Traps" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseTraps}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Science:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Science" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseScience}"/>
+                                    <TextBlock Text="{Binding Science, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Science" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseScience}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Repair:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Repair" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseRepair}"/>
+                                    <TextBlock Text="{Binding Repair, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Repair" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseRepair}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Speech:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Speech" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseSpeech}"/>
+                                    <TextBlock Text="{Binding Speech, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Speech" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseSpeech}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Barter:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Barter" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseBarter}"/>
+                                    <TextBlock Text="{Binding Barter, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Barter" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseBarter}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Gambling:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Gambling" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseGambling}"/>
+                                    <TextBlock Text="{Binding Gambling, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Gambling" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseGambling}"/></Grid>
+                                <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="85"/><ColumnDefinition Width="25"/><ColumnDefinition Width="40"/><ColumnDefinition Width="25"/></Grid.ColumnDefinitions>
+                                    <TextBlock Text="Outdoors:" FontWeight="Bold"/>
+                                    <Button Content="-" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" Tag="Outdoorsman" Click="DecreaseSkill_Click" IsEnabled="{Binding CanDecreaseOutdoorsman}"/>
+                                    <TextBlock Text="{Binding Outdoorsman, StringFormat={}{0}%}" Grid.Column="2" HorizontalAlignment="Center"/>
+                                    <Button Content="+" Grid.Column="3" Style="{StaticResource SkillAdjustButton}" Tag="Outdoorsman" Click="IncreaseSkill_Click" IsEnabled="{Binding CanIncreaseOutdoorsman}"/></Grid>
+                            </StackPanel>
+                        </Grid>
+                    </ScrollViewer>
+                </Grid>
+            </Grid>
+        </Border>
+
+        <!-- Button Bar -->
+        <Grid Grid.Row="1" Margin="30,5,30,10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Button Grid.Column="0" Content="Undo" Margin="3" Style="{StaticResource BoxButtons}" Click="Undo_Click"/>
+            <Button Grid.Column="1" Content="Equipment" Margin="3" Style="{StaticResource BoxButtons}" Click="Equipment_Click"/>
+            <Button Grid.Column="2" Content="Skill Books" Margin="3" Style="{StaticResource BoxButtons}" Click="SkillBooks_Click"/>
+            <Button Grid.Column="3" Content="Perks" Margin="3" Style="{StaticResource BoxButtons}" Click="Perks_Click"/>
+            <Button Grid.Column="4" Content="Level Up" Margin="3" Style="{StaticResource BoxButtons}" IsEnabled="{Binding CanLevelUp}" Click="LevelUp_Click"/>
+        </Grid>
+    </Grid>
+</Page>

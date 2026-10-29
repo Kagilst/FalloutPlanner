@@ -1,0 +1,36 @@
+<Window x:Class="FalloutPlanner.Games.Fallout2.Fallout2SkillBooksWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Skill Books" Height="300" Width="400"
+        WindowStartupLocation="CenterOwner"
+        Background="#0A0C08">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Fallout2Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="SKILL BOOKS" Grid.Row="0"
+                   Foreground="{StaticResource FalloutAccentBrush}"
+                   FontSize="16" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,10"/>
+
+        <Border Grid.Row="1" BorderBrush="{StaticResource FalloutBorderBrush}" BorderThickness="2" Padding="10">
+            <TextBlock Text="Skill book tracking coming soon." Foreground="{StaticResource FalloutTextBrush}"
+                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+        </Border>
+
+        <Button Content="Close" Grid.Row="2" Style="{StaticResource BoxButtons}"
+                Click="Close_Click" Margin="0,10,0,0" Padding="15,5" HorizontalAlignment="Center"/>
+    </Grid>
+</Window>

@@ -1,0 +1,34 @@
+<Window x:Class="FalloutPlanner.Games.Fallout4.Fallout4SpecialChoiceWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="You're SPECIAL!"
+        Height="280" Width="360"
+        WindowStartupLocation="CenterOwner"
+        ResizeMode="NoResize"
+        Background="{DynamicResource FalloutBackgroundBrush}"
+        Foreground="{DynamicResource FalloutTextBrush}"
+        FontFamily="Consolas">
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Fallout4Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+    <Border Margin="14" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="12">
+        <DockPanel>
+            <TextBlock DockPanel.Dock="Top" Text="Choose a SPECIAL to raise by +1"
+                       FontWeight="Bold" Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,10"/>
+            <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,12,0,0">
+                <Button Content="Cancel" Width="90" Margin="0,0,8,0" Style="{StaticResource BoxButtons}" Click="Cancel_Click"/>
+                <Button x:Name="ConfirmButton" Content="Confirm" Width="90" Style="{StaticResource BoxButtons}"
+                        IsEnabled="False" Click="Confirm_Click"/>
+            </StackPanel>
+            <ListBox x:Name="SpecialList"
+                     Background="{DynamicResource FalloutPanelBrush}"
+                     Foreground="{DynamicResource FalloutTextBrush}"
+                     BorderBrush="{DynamicResource FalloutBorderBrush}"
+                     SelectionChanged="SpecialList_SelectionChanged"/>
+        </DockPanel>
+    </Border>
+</Window>

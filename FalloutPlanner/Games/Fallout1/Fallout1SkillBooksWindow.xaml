@@ -1,0 +1,115 @@
+<Window x:Class="FalloutPlanner.Games.Fallout1.Fallout1SkillBooksWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Skill Books" Height="400" Width="550"
+        WindowStartupLocation="CenterOwner"
+        Background="#0A0C08">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Fallout1Resources.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Grid Margin="15">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <TextBlock Text="SKILL BOOKS" Grid.Row="0"
+                   Foreground="{StaticResource FalloutAccentBrush}"
+                   FontSize="16" FontWeight="Bold"
+                   HorizontalAlignment="Center" Margin="0,0,0,5"/>
+
+        <!-- Info -->
+        <TextBlock Grid.Row="1" Foreground="{StaticResource FalloutTextBrush}" 
+                   TextWrapping="Wrap" Margin="0,0,0,10" HorizontalAlignment="Center">
+            <Run Text="Points per book: "/>
+            <Run x:Name="PointsPerBook" FontWeight="Bold"/>
+            <Run Text=" ("/>
+            <Run x:Name="ComprehensionNote"/>
+            <Run Text=")"/>
+        </TextBlock>
+
+        <!-- Book List -->
+        <Border Grid.Row="2" BorderBrush="{StaticResource FalloutBorderBrush}" 
+                BorderThickness="2" Padding="10">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="40"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Guns and Bullets -->
+                <TextBlock Text="Guns and Bullets (Small Guns):" Grid.Row="0" 
+                           Foreground="{StaticResource FalloutTextBrush}" VerticalAlignment="Center"/>
+                <Button Content="-" Grid.Row="0" Grid.Column="1" Style="{StaticResource SkillAdjustButton}" 
+                        Tag="Guns and Bullets" Click="DecreaseBook_Click"/>
+                <TextBlock x:Name="GunsAndBulletsCount" Text="0" Grid.Row="0" Grid.Column="2" 
+                           Foreground="{StaticResource FalloutTextBrush}" TextAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="+" Grid.Row="0" Grid.Column="3" Style="{StaticResource SkillAdjustButton}"
+                        Tag="Guns and Bullets" Click="IncreaseBook_Click"/>
+
+                <!-- Big Book of Science -->
+                <TextBlock Text="Big Book of Science (Science):" Grid.Row="1" 
+                           Foreground="{StaticResource FalloutTextBrush}" VerticalAlignment="Center"/>
+                <Button Content="-" Grid.Row="1" Grid.Column="1" Style="{StaticResource SkillAdjustButton}"
+                        Tag="Big Book of Science" Click="DecreaseBook_Click"/>
+                <TextBlock x:Name="BigBookOfScienceCount" Text="0" Grid.Row="1" Grid.Column="2" 
+                           Foreground="{StaticResource FalloutTextBrush}" TextAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="+" Grid.Row="1" Grid.Column="3" Style="{StaticResource SkillAdjustButton}"
+                        Tag="Big Book of Science" Click="IncreaseBook_Click"/>
+
+                <!-- Dean's Electronics -->
+                <TextBlock Text="Dean's Electronics (Repair):" Grid.Row="2" 
+                           Foreground="{StaticResource FalloutTextBrush}" VerticalAlignment="Center"/>
+                <Button Content="-" Grid.Row="2" Grid.Column="1" Style="{StaticResource SkillAdjustButton}"
+                        Tag="Dean's Electronics" Click="DecreaseBook_Click"/>
+                <TextBlock x:Name="DeansElectronicsCount" Text="0" Grid.Row="2" Grid.Column="2" 
+                           Foreground="{StaticResource FalloutTextBrush}" TextAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="+" Grid.Row="2" Grid.Column="3" Style="{StaticResource SkillAdjustButton}"
+                        Tag="Dean's Electronics" Click="IncreaseBook_Click"/>
+
+                <!-- First Aid Book -->
+                <TextBlock Text="First Aid Book (First Aid):" Grid.Row="3" 
+                           Foreground="{StaticResource FalloutTextBrush}" VerticalAlignment="Center"/>
+                <Button Content="-" Grid.Row="3" Grid.Column="1" Style="{StaticResource SkillAdjustButton}"
+                        Tag="First Aid Book" Click="DecreaseBook_Click"/>
+                <TextBlock x:Name="FirstAidBookCount" Text="0" Grid.Row="3" Grid.Column="2" 
+                           Foreground="{StaticResource FalloutTextBrush}" TextAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="+" Grid.Row="3" Grid.Column="3" Style="{StaticResource SkillAdjustButton}"
+                        Tag="First Aid Book" Click="IncreaseBook_Click"/>
+
+                <!-- Scout Handbook -->
+                <TextBlock Text="Scout Handbook (Outdoorsman):" Grid.Row="4" 
+                           Foreground="{StaticResource FalloutTextBrush}" VerticalAlignment="Center"/>
+                <Button Content="-" Grid.Row="4" Grid.Column="1" Style="{StaticResource SkillAdjustButton}"
+                        Tag="Scout Handbook" Click="DecreaseBook_Click"/>
+                <TextBlock x:Name="ScoutHandbookCount" Text="0" Grid.Row="4" Grid.Column="2" 
+                           Foreground="{StaticResource FalloutTextBrush}" TextAlignment="Center" VerticalAlignment="Center"/>
+                <Button Content="+" Grid.Row="4" Grid.Column="3" Style="{StaticResource SkillAdjustButton}"
+                        Tag="Scout Handbook" Click="IncreaseBook_Click"/>
+            </Grid>
+        </Border>
+
+        <!-- Close Button -->
+        <Button Content="Close" Grid.Row="3" Style="{StaticResource BoxButtons}"
+                Click="Close_Click" Margin="0,10,0,0" Padding="15,5"
+                HorizontalAlignment="Center"/>
+    </Grid>
+</Window>
