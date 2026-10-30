@@ -37,6 +37,24 @@ namespace FalloutPlanner.Games.Fallout3
 
         private readonly List<CharacterActionState> _actionStates = new();
         public ObservableCollection<string> ActionLog { get; } = new();
+        public string? ActiveSaveId { get; set; }
+        public bool IsDirty { get; private set; }
+        public void MarkClean() => IsDirty = false;
+        public void MarkDirty() => IsDirty = true;
+
+        public string GetSpecialLine(bool starting = false)
+        {
+            var stats = starting && _namedBaseline != null ? _namedBaseline : Current;
+            return $"S {stats.Strength} / P {stats.Perception} / E {stats.Endurance} / " +
+                   $"C {stats.Charisma} / I {stats.Intelligence} / A {stats.Agility} / L {stats.Luck}";
+        }
+
+        public string GetTaggedSkillsLine()
+        {
+            if (_taggedSkillNames == null || _taggedSkillNames.Count == 0)
+                return "";
+            return string.Join(", ", _taggedSkillNames.OrderBy(FormatSkillName).Select(FormatSkillName));
+        }
 
         public Fallout3CharacterStats Current => _history.Peek();
         private Dictionary<string, int> SkillIncreasesThisLevel => _skillIncreaseHistory.Peek();
@@ -616,7 +634,7 @@ namespace FalloutPlanner.Games.Fallout3
             _actionStates.Add(CaptureActionState());
         }
 
-        private CharacterActionState CaptureActionState()
+        public CharacterActionState CaptureActionState()
         {
             return new CharacterActionState
             {
@@ -626,15 +644,18 @@ namespace FalloutPlanner.Games.Fallout3
                 QuestPerks = CloneQuestPerks(TakenQuestPerks),
                 Bobbleheads = new HashSet<string>(FoundBobbleheadNames),
                 SkillBookCounts = new Dictionary<string, int>(SkillBookCounts),
-                SkillBookLocations = new HashSet<string>(FoundSkillBookLocations)
+                SkillBookLocations = new HashSet<string>(FoundSkillBookLocations),
+                TaggedSkillNames = new HashSet<string>(_taggedSkillNames)
             };
         }
 
-        private void RestoreActionState(CharacterActionState state)
+        public void RestoreActionState(CharacterActionState state)
         {
             TakenPerks.Clear();
             foreach (var kvp in state.TakenPerks)
                 TakenPerks[kvp.Key] = kvp.Value;
+
+            _taggedSkillNames = new HashSet<string>(state.TaggedSkillNames ?? new HashSet<string>());
 
             _history.Clear();
             _skillIncreaseHistory.Clear();
@@ -678,6 +699,7 @@ namespace FalloutPlanner.Games.Fallout3
 
             _actionStates.Insert(0, CaptureActionState());
             ActionLog.Insert(0, description);
+            IsDirty = true;
         }
 
         /// <summary>
@@ -695,17 +717,74 @@ namespace FalloutPlanner.Games.Fallout3
             return true;
         }
 
+        public FalloutPlanner.Saves.Adapters.ClassicGameSavePayload<CharacterActionState> CreateSavePayload()
+        {
+            var payload = new FalloutPlanner.Saves.Adapters.ClassicGameSavePayload<CharacterActionState>
+            {
+                Current = CaptureActionState(),
+                Baseline = _namedBaseline == null
+                    ? null
+                    : new CharacterActionState { Stats = _namedBaseline.Clone() },
+                ActionLogNewestFirst = ActionLog.ToList()
+            };
+            foreach (var state in _actionStates)
+                payload.ActionStates.Add(CloneState(state));
+            return payload;
+        }
+
+        public void LoadFromSavePayload(
+            FalloutPlanner.Saves.Adapters.ClassicGameSavePayload<CharacterActionState> payload,
+            string? saveId)
+        {
+            if (payload.Baseline?.Stats != null)
+                _namedBaseline = payload.Baseline.Stats.Clone();
+            else if (payload.Current?.Stats != null)
+                _namedBaseline = payload.Current.Stats.Clone();
+
+            ActionLog.Clear();
+            _actionStates.Clear();
+
+            if (payload.ActionStates.Count > 0 && payload.ActionLogNewestFirst.Count > 0)
+            {
+                foreach (var entry in payload.ActionLogNewestFirst)
+                    ActionLog.Add(entry);
+                foreach (var state in payload.ActionStates)
+                    _actionStates.Add(CloneState(state));
+                RestoreActionState(_actionStates[0]);
+            }
+            else if (payload.Current != null)
+            {
+                RestoreActionState(CloneState(payload.Current));
+                ResetActionLog($"Created Character: {Name}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(Current.CharacterName))
+                Name = Current.CharacterName;
+
+            ActiveSaveId = saveId;
+            MarkClean();
+            OnPropertyChanged(null);
+        }
+
+        private static CharacterActionState CloneState(CharacterActionState state) =>
+            System.Text.Json.JsonSerializer.Deserialize<CharacterActionState>(
+                System.Text.Json.JsonSerializer.Serialize(state, FalloutPlanner.Saves.SaveJsonOptions.Options),
+                FalloutPlanner.Saves.SaveJsonOptions.Options)!;
+
         private static Dictionary<string, QuestPerkState> CloneQuestPerks(Dictionary<string, QuestPerkState> source)
         {
             var copy = new Dictionary<string, QuestPerkState>();
             foreach (var kvp in source)
             {
+                var perk = kvp.Value.Perk
+                    ?? Fallout3PerkRepository.AllPerks.FirstOrDefault(p => p.Name == kvp.Value.Name)
+                    ?? Fallout3QuestPerkRepository.All.FirstOrDefault(p => p.Name == kvp.Value.Name);
                 copy[kvp.Key] = new QuestPerkState
                 {
                     Name = kvp.Value.Name,
                     DisplayName = kvp.Value.DisplayName,
                     Description = kvp.Value.Description,
-                    Perk = kvp.Value.Perk,
+                    Perk = perk!,
                     ChoiceDetail = kvp.Value.ChoiceDetail
                 };
             }
@@ -1647,6 +1726,15 @@ namespace FalloutPlanner.Games.Fallout3
             _ => propertyName
         };
 
+        private static string FormatChoicePerkLabel(string perkName, string intenseTrainingSpecial, string tagSkill)
+        {
+            if (!string.IsNullOrEmpty(intenseTrainingSpecial))
+                return $"{perkName} {intenseTrainingSpecial}";
+            if (!string.IsNullOrEmpty(tagSkill))
+                return $"{perkName} {FormatSkillName(tagSkill)}";
+            return perkName;
+        }
+
         private static string FormatSkillSpendSummary(Dictionary<string, int> increases)
         {
             var parts = increases
@@ -1668,9 +1756,10 @@ namespace FalloutPlanner.Games.Fallout3
                 skillIncrease += 3;
 
             string spendSummary = FormatSkillSpendSummary(SkillIncreasesThisLevel);
+            string perkLabel = FormatChoicePerkLabel(perk.Name, intenseTrainingSpecial, tagSkill);
             string description = string.IsNullOrEmpty(spendSummary)
-                ? $"Level Up: Level {nextLevel}, Perk: {perk.Name}"
-                : $"Level Up: Level {nextLevel}, {spendSummary}, Perk: {perk.Name}";
+                ? $"Level Up: Level {nextLevel}, Perk: {perkLabel}"
+                : $"Level Up: Level {nextLevel}, {spendSummary}, Perk: {perkLabel}";
 
             RecordLoggedAction(description, () =>
             {

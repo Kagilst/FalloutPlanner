@@ -28,6 +28,24 @@ namespace FalloutPlanner.Games.Fallout2
 
         private readonly List<CharacterActionState> _actionStates = new();
         public ObservableCollection<string> ActionLog { get; } = new();
+        public string? ActiveSaveId { get; set; }
+        public bool IsDirty { get; private set; }
+        public void MarkClean() => IsDirty = false;
+        public void MarkDirty() => IsDirty = true;
+
+        public string GetSpecialLine(bool starting = false)
+        {
+            var stats = starting && _namedBaseline != null ? _namedBaseline : Current;
+            return $"S {stats.Strength} / P {stats.Perception} / E {stats.Endurance} / " +
+                   $"C {stats.Charisma} / I {stats.Intelligence} / A {stats.Agility} / L {stats.Luck}";
+        }
+
+        public string GetTaggedSkillsLine()
+        {
+            if (_taggedSkillNames == null || _taggedSkillNames.Count == 0)
+                return "";
+            return string.Join(", ", _taggedSkillNames.OrderBy(FormatSkillName).Select(FormatSkillName));
+        }
 
         public Fallout2CharacterStats Current => _history.Peek();
         private Dictionary<string, int> SkillIncreasesThisLevel => _skillIncreaseHistory.Peek();
@@ -396,7 +414,7 @@ namespace FalloutPlanner.Games.Fallout2
             _actionStates.Add(CaptureActionState());
         }
 
-        private CharacterActionState CaptureActionState()
+        public CharacterActionState CaptureActionState()
         {
             return new CharacterActionState
             {
@@ -404,17 +422,19 @@ namespace FalloutPlanner.Games.Fallout2
                 SkillIncreases = new Dictionary<string, int>(SkillIncreasesThisLevel),
                 TakenPerks = new Dictionary<string, int>(TakenPerks),
                 SkillBookCounts = new Dictionary<string, int>(SkillBookCounts),
-                SkillInvestment = new Dictionary<string, int>(_skillInvestment)
+                SkillInvestment = new Dictionary<string, int>(_skillInvestment),
+                TaggedSkillNames = new HashSet<string>(_taggedSkillNames)
             };
         }
 
-        private void RestoreActionState(CharacterActionState state)
+        public void RestoreActionState(CharacterActionState state)
         {
             TakenPerks.Clear();
             foreach (var kvp in state.TakenPerks)
                 TakenPerks[kvp.Key] = kvp.Value;
 
             _skillInvestment = new Dictionary<string, int>(state.SkillInvestment);
+            _taggedSkillNames = new HashSet<string>(state.TaggedSkillNames ?? new HashSet<string>());
 
             _history.Clear();
             _skillIncreaseHistory.Clear();
@@ -442,6 +462,7 @@ namespace FalloutPlanner.Games.Fallout2
 
             _actionStates.Insert(0, CaptureActionState());
             ActionLog.Insert(0, description);
+            IsDirty = true;
         }
 
         public bool TryUndoLastAction()
@@ -454,6 +475,60 @@ namespace FalloutPlanner.Games.Fallout2
             RestoreActionState(_actionStates[0]);
             return true;
         }
+
+        public FalloutPlanner.Saves.Adapters.ClassicGameSavePayload<CharacterActionState> CreateSavePayload()
+        {
+            var payload = new FalloutPlanner.Saves.Adapters.ClassicGameSavePayload<CharacterActionState>
+            {
+                Current = CaptureActionState(),
+                Baseline = _namedBaseline == null
+                    ? null
+                    : new CharacterActionState { Stats = _namedBaseline.Clone() },
+                ActionLogNewestFirst = ActionLog.ToList()
+            };
+            foreach (var state in _actionStates)
+                payload.ActionStates.Add(CloneState(state));
+            return payload;
+        }
+
+        public void LoadFromSavePayload(
+            FalloutPlanner.Saves.Adapters.ClassicGameSavePayload<CharacterActionState> payload,
+            string? saveId)
+        {
+            if (payload.Baseline?.Stats != null)
+                _namedBaseline = payload.Baseline.Stats.Clone();
+            else if (payload.Current?.Stats != null)
+                _namedBaseline = payload.Current.Stats.Clone();
+
+            ActionLog.Clear();
+            _actionStates.Clear();
+
+            if (payload.ActionStates.Count > 0 && payload.ActionLogNewestFirst.Count > 0)
+            {
+                foreach (var entry in payload.ActionLogNewestFirst)
+                    ActionLog.Add(entry);
+                foreach (var state in payload.ActionStates)
+                    _actionStates.Add(CloneState(state));
+                RestoreActionState(_actionStates[0]);
+            }
+            else if (payload.Current != null)
+            {
+                RestoreActionState(CloneState(payload.Current));
+                ResetActionLog($"Created Character: {Name}");
+            }
+
+            if (!string.IsNullOrWhiteSpace(Current.CharacterName))
+                Name = Current.CharacterName;
+
+            ActiveSaveId = saveId;
+            MarkClean();
+            OnPropertyChanged(null);
+        }
+
+        private static CharacterActionState CloneState(CharacterActionState state) =>
+            System.Text.Json.JsonSerializer.Deserialize<CharacterActionState>(
+                System.Text.Json.JsonSerializer.Serialize(state, FalloutPlanner.Saves.SaveJsonOptions.Options),
+                FalloutPlanner.Saves.SaveJsonOptions.Options)!;
 
         private Fallout2CharacterStats CreateCurrentSnapshot()
         {
@@ -1152,9 +1227,12 @@ namespace FalloutPlanner.Games.Fallout2
             string description;
             if (needsPerk && perk != null)
             {
+                string perkLabel = string.IsNullOrEmpty(tagSkill)
+                    ? perk.Name
+                    : $"{perk.Name} {FormatSkillName(tagSkill)}";
                 description = string.IsNullOrEmpty(spendSummary)
-                    ? $"Level Up: Level {nextLevel}, Perk: {perk.Name}"
-                    : $"Level Up: Level {nextLevel}, {spendSummary}, Perk: {perk.Name}";
+                    ? $"Level Up: Level {nextLevel}, Perk: {perkLabel}"
+                    : $"Level Up: Level {nextLevel}, {spendSummary}, Perk: {perkLabel}";
             }
             else
             {

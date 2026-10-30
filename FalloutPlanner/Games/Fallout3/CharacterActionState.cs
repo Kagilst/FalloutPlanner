@@ -13,5 +13,6 @@ namespace FalloutPlanner.Games.Fallout3
         public HashSet<string> Bobbleheads { get; set; } = new();
         public Dictionary<string, int> SkillBookCounts { get; set; } = new();
         public HashSet<string> SkillBookLocations { get; set; } = new();
+        public HashSet<string> TaggedSkillNames { get; set; } = new();
     }
 }

@@ -36,6 +36,28 @@ public partial class Fallout4Window : Page
             NavigationService.GoBack();
     }
 
+    private void Characters_Click(object sender, RoutedEventArgs e)
+    {
+        var browser = new FalloutPlanner.Saves.SavedCharactersWindow(FalloutPlanner.Saves.GameIds.Fallout4)
+        {
+            Owner = Window.GetWindow(this)
+        };
+        if (browser.ShowDialog() != true || browser.SelectedSave == null)
+            return;
+
+        var file = FalloutPlanner.Saves.CharacterSaveService.SharedRepository
+            .Load(FalloutPlanner.Saves.GameIds.Fallout4, browser.SelectedSave.Id);
+        if (file == null)
+        {
+            MessageBox.Show(Window.GetWindow(this), "Could not load that save.", "Saved Characters",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        var loaded = FalloutPlanner.Saves.Adapters.Fallout4SaveAdapter.FromFile(file);
+        NavigationService?.Navigate(new Fallout4LevelPage(loaded));
+    }
+
     private void ModifySpecial_Click(object sender, RoutedEventArgs e)
     {
         if (sender is not Button button || button.Tag is null)

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using FalloutPlanner.Games.Fallout1.Perks;
 
 namespace FalloutPlanner.Games.Fallout1
 {
@@ -9,7 +8,8 @@ namespace FalloutPlanner.Games.Fallout1
         public Fallout1CharacterStats Stats { get; set; } = null!;
         public Dictionary<string, int> SkillIncreases { get; set; } = new();
         public Dictionary<string, int> TakenPerks { get; set; } = new();
-        public Fallout1Perk? LastPerk { get; set; }
+        /// <summary>Perk name only — rehydrate from repository on restore.</summary>
+        public string? LastPerkName { get; set; }
         public Dictionary<string, int> SkillBookCounts { get; set; } = new();
     }
 }

@@ -65,8 +65,16 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
-                    <TextBlock Text="Owned Perks" FontSize="16" FontWeight="Bold"
-                               Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,8"/>
+                    <DockPanel Margin="0,0,0,8">
+                        <CheckBox DockPanel.Dock="Right"
+                                  Content="Misc only"
+                                  VerticalAlignment="Center"
+                                  IsChecked="{Binding ShowMiscOnly}"
+                                  Foreground="{DynamicResource FalloutTextBrush}"/>
+                        <TextBlock Text="Owned Perks" FontSize="16" FontWeight="Bold"
+                                   Foreground="{DynamicResource FalloutAccentBrush}"
+                                   VerticalAlignment="Center"/>
+                    </DockPanel>
                     <ListBox x:Name="OwnedList" Grid.Row="1"
                              ItemsSource="{Binding OwnedPerks}"
                              SelectedItem="{Binding SelectedOwnedPerk}"

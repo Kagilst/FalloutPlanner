@@ -56,6 +56,28 @@ public partial class Fallout3Window : Page
         }
     }
 
+    private void Characters_Click(object sender, RoutedEventArgs e)
+    {
+        var browser = new FalloutPlanner.Saves.SavedCharactersWindow(FalloutPlanner.Saves.GameIds.Fallout3)
+        {
+            Owner = Window.GetWindow(this)
+        };
+        if (browser.ShowDialog() != true || browser.SelectedSave == null)
+            return;
+
+        var file = FalloutPlanner.Saves.CharacterSaveService.SharedRepository
+            .Load(FalloutPlanner.Saves.GameIds.Fallout3, browser.SelectedSave.Id);
+        if (file == null)
+        {
+            MessageBox.Show(Window.GetWindow(this), "Could not load that save.", "Saved Characters",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        var loaded = FalloutPlanner.Saves.Adapters.Fallout3SaveAdapter.FromFile(file);
+        NavigationService?.Navigate(new FalloutPlanner.Games.Fallout3.Fallout3LevelPage(loaded));
+    }
+
     //Modify SPECIAL
 
     private void ModifySpecial_Click(object sender, RoutedEventArgs e)

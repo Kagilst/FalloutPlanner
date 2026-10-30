@@ -93,6 +93,35 @@ namespace FalloutPlanner.Games.Fallout3
                     NavigationService.GoBack();
             }
         }
+
+        private void Settings_Restart(object sender, RoutedEventArgs e)
+        {
+            Character.RevertToCreationState();
+            if (NavigationService?.CanGoBack == true)
+                NavigationService.GoBack();
+        }
+
+        private void Settings_Home(object sender, RoutedEventArgs e) =>
+            NavigationService?.Navigate(new FalloutPlanner.HomePage());
+
+        private void Settings_Save(object sender, RoutedEventArgs e)
+        {
+            FalloutPlanner.Saves.CharacterSaveService.TrySaveFallout3(Character, Window.GetWindow(this));
+        }
+
+        private void Settings_ExportGuide(object sender, RoutedEventArgs e)
+        {
+            FalloutPlanner.Saves.MarkdownGuideExporter.TryExportGeneric(
+                "Fallout 3",
+                Character.Name,
+                Character.Level,
+                Character.GetSpecialLine(starting: true),
+                Character.GetSpecialLine(starting: false),
+                Character.GetTaggedSkillsLine(),
+                Character.ActionLog,
+                $"- Health: {Character.Health}\n- Skill Points: {Character.SkillPoints}",
+                Window.GetWindow(this));
+        }
     }
 
 }

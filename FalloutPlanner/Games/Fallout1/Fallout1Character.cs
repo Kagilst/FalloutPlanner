@@ -27,6 +27,48 @@ namespace FalloutPlanner.Games.Fallout1
         private Fallout1CharacterStats? _namedBaseline;
         private readonly List<CharacterActionState> _actionStates = new();
         public ObservableCollection<string> ActionLog { get; } = new();
+        public string? ActiveSaveId { get; set; }
+        public bool IsDirty { get; private set; }
+        public void MarkClean() => IsDirty = false;
+        public void MarkDirty() => IsDirty = true;
+
+        public string GetSpecialLine(bool starting = false)
+        {
+            var stats = starting && _namedBaseline != null ? _namedBaseline : Current;
+            return $"S {stats.Strength} / P {stats.Perception} / E {stats.Endurance} / " +
+                   $"C {stats.Charisma} / I {stats.Intelligence} / A {stats.Agility} / L {stats.Luck}";
+        }
+
+        public string GetTaggedSkillsLine()
+        {
+            var tags = (_namedBaseline ?? Current).TaggedSkills;
+            if (tags == null || tags.Count == 0)
+                return "";
+            return string.Join(", ", tags.OrderBy(n => n).Select(FormatTaggedSkillName));
+        }
+
+        private static string FormatTaggedSkillName(string propertyName) => propertyName switch
+        {
+            nameof(SmallGuns) => "Small Guns",
+            nameof(BigGuns) => "Big Guns",
+            nameof(EnergyWeapons) => "Energy Weapons",
+            nameof(Unarmed) => "Unarmed",
+            nameof(MeleeWeapons) => "Melee Weapons",
+            nameof(Throwing) => "Throwing",
+            nameof(FirstAid) => "First Aid",
+            nameof(Doctor) => "Doctor",
+            nameof(Sneak) => "Sneak",
+            nameof(Lockpick) => "Lockpick",
+            nameof(Steal) => "Steal",
+            nameof(Traps) => "Traps",
+            nameof(Science) => "Science",
+            nameof(Repair) => "Repair",
+            nameof(Speech) => "Speech",
+            nameof(Barter) => "Barter",
+            nameof(Gambling) => "Gambling",
+            nameof(Outdoorsman) => "Outdoorsman",
+            _ => propertyName
+        };
 
         public Fallout1CharacterStats Current => _history.Peek();
         private Dictionary<string, int> SkillIncreasesThisLevel => _skillIncreaseHistory.Peek();
@@ -420,23 +462,28 @@ namespace FalloutPlanner.Games.Fallout1
             _actionStates.Add(CaptureActionState());
         }
 
-        private CharacterActionState CaptureActionState()
+        public CharacterActionState CaptureActionState()
         {
+            var lastPerk = _perkHistory.Count > 0 ? _perkHistory.Peek() : null;
             return new CharacterActionState
             {
                 Stats = CreateCurrentSnapshot(),
                 SkillIncreases = new Dictionary<string, int>(SkillIncreasesThisLevel),
                 TakenPerks = new Dictionary<string, int>(TakenPerks),
-                LastPerk = _perkHistory.Count > 0 ? _perkHistory.Peek() : null,
+                LastPerkName = lastPerk?.Name,
                 SkillBookCounts = new Dictionary<string, int>(SkillBookCounts)
             };
         }
 
-        private void RestoreActionState(CharacterActionState state)
+        public void RestoreActionState(CharacterActionState state)
         {
             TakenPerks.Clear();
             foreach (var kvp in state.TakenPerks)
                 TakenPerks[kvp.Key] = kvp.Value;
+
+            Fallout1Perk? lastPerk = null;
+            if (!string.IsNullOrEmpty(state.LastPerkName))
+                lastPerk = Fallout1PerkRepository.AllPerks.FirstOrDefault(p => p.Name == state.LastPerkName);
 
             _history.Clear();
             _skillIncreaseHistory.Clear();
@@ -448,7 +495,7 @@ namespace FalloutPlanner.Games.Fallout1
             _skillIncreaseHistory.Push(new Dictionary<string, int>());
             _skillIncreaseHistory.Push(new Dictionary<string, int>(state.SkillIncreases));
             _perkHistory.Push(null);
-            _perkHistory.Push(state.LastPerk);
+            _perkHistory.Push(lastPerk);
             _skillBookCountHistory.Push(new Dictionary<string, int>());
             _skillBookCountHistory.Push(new Dictionary<string, int>(state.SkillBookCounts));
 
@@ -465,6 +512,7 @@ namespace FalloutPlanner.Games.Fallout1
 
             _actionStates.Insert(0, CaptureActionState());
             ActionLog.Insert(0, description);
+            IsDirty = true;
         }
 
         /// <summary>
@@ -481,6 +529,57 @@ namespace FalloutPlanner.Games.Fallout1
             RestoreActionState(_actionStates[0]);
             return true;
         }
+
+        public FalloutPlanner.Saves.Adapters.ClassicGameSavePayload<CharacterActionState> CreateSavePayload()
+        {
+            var payload = new FalloutPlanner.Saves.Adapters.ClassicGameSavePayload<CharacterActionState>
+            {
+                Current = CaptureActionState(),
+                Baseline = _namedBaseline == null
+                    ? null
+                    : new CharacterActionState { Stats = _namedBaseline.Clone() },
+                ActionLogNewestFirst = ActionLog.ToList()
+            };
+            foreach (var state in _actionStates)
+                payload.ActionStates.Add(CloneState(state));
+            return payload;
+        }
+
+        public void LoadFromSavePayload(
+            FalloutPlanner.Saves.Adapters.ClassicGameSavePayload<CharacterActionState> payload,
+            string? saveId)
+        {
+            if (payload.Baseline?.Stats != null)
+                _namedBaseline = payload.Baseline.Stats.Clone();
+            else if (payload.Current?.Stats != null)
+                _namedBaseline = payload.Current.Stats.Clone();
+
+            ActionLog.Clear();
+            _actionStates.Clear();
+
+            if (payload.ActionStates.Count > 0 && payload.ActionLogNewestFirst.Count > 0)
+            {
+                foreach (var entry in payload.ActionLogNewestFirst)
+                    ActionLog.Add(entry);
+                foreach (var state in payload.ActionStates)
+                    _actionStates.Add(CloneState(state));
+                RestoreActionState(_actionStates[0]);
+            }
+            else if (payload.Current != null)
+            {
+                RestoreActionState(CloneState(payload.Current));
+                ResetActionLog($"Created Character: {Name}");
+            }
+
+            ActiveSaveId = saveId;
+            MarkClean();
+            OnPropertyChanged(null);
+        }
+
+        private static CharacterActionState CloneState(CharacterActionState state) =>
+            System.Text.Json.JsonSerializer.Deserialize<CharacterActionState>(
+                System.Text.Json.JsonSerializer.Serialize(state, FalloutPlanner.Saves.SaveJsonOptions.Options),
+                FalloutPlanner.Saves.SaveJsonOptions.Options)!;
 
         private Fallout1CharacterStats CreateCurrentSnapshot()
         {
@@ -921,14 +1020,35 @@ namespace FalloutPlanner.Games.Fallout1
             }
         }
 
+        private static string FormatSkillSpendSummary(Dictionary<string, int> increases)
+        {
+            if (increases == null || increases.Count == 0)
+                return "";
+            return string.Join(", ",
+                increases.Where(k => k.Value > 0)
+                    .OrderBy(k => k.Key)
+                    .Select(k => $"{k.Key} +{k.Value}"));
+        }
+
         public void LevelUp(Fallout1Perk? perk = null)
         {
             int nextLevel = Level + 1;
             bool needsPerk = (nextLevel % PerkInterval) == 0;
+            string spendSummary = FormatSkillSpendSummary(SkillIncreasesThisLevel);
 
-            string description = needsPerk && perk != null
-                ? $"Level Up: Level {nextLevel}, Perk: {perk.Name}"
-                : $"Level Up: Level {nextLevel}";
+            string description;
+            if (needsPerk && perk != null)
+            {
+                description = string.IsNullOrEmpty(spendSummary)
+                    ? $"Level Up: Level {nextLevel}, Perk: {perk.Name}"
+                    : $"Level Up: Level {nextLevel}, {spendSummary}, Perk: {perk.Name}";
+            }
+            else
+            {
+                description = string.IsNullOrEmpty(spendSummary)
+                    ? $"Level Up: Level {nextLevel}"
+                    : $"Level Up: Level {nextLevel}, {spendSummary}";
+            }
 
             RecordLoggedAction(description, () =>
             {

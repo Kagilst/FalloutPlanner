@@ -35,6 +35,20 @@ namespace FalloutPlanner.Games.Fallout4
         public bool YoureSpecialCollected { get; private set; }
         public string? YoureSpecialChoice { get; private set; }
 
+        /// <summary>Id of the disk save this session is linked to, if any.</summary>
+        public string? ActiveSaveId { get; set; }
+        public bool IsDirty { get; private set; }
+
+        public void MarkClean() => IsDirty = false;
+        public void MarkDirty() => IsDirty = true;
+
+        public string GetSpecialLine(bool starting = false)
+        {
+            var stats = starting && _namedBaseline != null ? _namedBaseline : Current;
+            return $"S {stats.Strength} / P {stats.Perception} / E {stats.Endurance} / " +
+                   $"C {stats.Charisma} / I {stats.Intelligence} / A {stats.Agility} / L {stats.Luck}";
+        }
+
         public Fallout4CharacterStats Current => _history.Peek();
 
         public Fallout4Character(Fallout4CharacterStats startingStats)
@@ -709,7 +723,7 @@ namespace FalloutPlanner.Games.Fallout4
             _actionStates.Add(CaptureActionState());
         }
 
-        private CharacterActionState CaptureActionState() => new()
+        public CharacterActionState CaptureActionState() => new()
         {
             Stats = Current.Clone(),
             PerkRanks = new Dictionary<string, int>(PerkRanks),
@@ -721,7 +735,7 @@ namespace FalloutPlanner.Games.Fallout4
             YoureSpecialChoice = YoureSpecialChoice
         };
 
-        private void RestoreActionState(CharacterActionState state)
+        public void RestoreActionState(CharacterActionState state)
         {
             PerkRanks.Clear();
             foreach (var kvp in state.PerkRanks)
@@ -748,8 +762,69 @@ namespace FalloutPlanner.Games.Fallout4
 
             _history.Clear();
             _history.Push(state.Stats.Clone());
+            RecalculateDerivedStats();
             OnPropertyChanged(null);
         }
+
+        public FalloutPlanner.Saves.Adapters.Fallout4SavePayload CreateSavePayload()
+        {
+            var payload = new FalloutPlanner.Saves.Adapters.Fallout4SavePayload
+            {
+                Current = CaptureActionState(),
+                Baseline = _namedBaseline == null
+                    ? null
+                    : new CharacterActionState { Stats = _namedBaseline.Clone() },
+                ActionLogNewestFirst = ActionLog.ToList()
+            };
+
+            foreach (var state in _actionStates)
+                payload.ActionStates.Add(CloneActionState(state));
+
+            return payload;
+        }
+
+        public void LoadFromSavePayload(FalloutPlanner.Saves.Adapters.Fallout4SavePayload payload, string? saveId)
+        {
+            if (payload.Baseline?.Stats != null)
+                _namedBaseline = payload.Baseline.Stats.Clone();
+            else if (payload.Current?.Stats != null)
+                _namedBaseline = payload.Current.Stats.Clone();
+
+            ActionLog.Clear();
+            _actionStates.Clear();
+
+            if (payload.ActionStates.Count > 0 && payload.ActionLogNewestFirst.Count > 0)
+            {
+                for (int i = 0; i < payload.ActionLogNewestFirst.Count; i++)
+                    ActionLog.Add(payload.ActionLogNewestFirst[i]);
+
+                foreach (var state in payload.ActionStates)
+                    _actionStates.Add(CloneActionState(state));
+
+                RestoreActionState(_actionStates[0]);
+            }
+            else if (payload.Current != null)
+            {
+                RestoreActionState(CloneActionState(payload.Current));
+                ResetActionLog($"Created Character: {Name}");
+            }
+
+            ActiveSaveId = saveId;
+            MarkClean();
+            OnPropertyChanged(null);
+        }
+
+        private static CharacterActionState CloneActionState(CharacterActionState state) => new()
+        {
+            Stats = state.Stats.Clone(),
+            PerkRanks = new Dictionary<string, int>(state.PerkRanks),
+            MiscPerkRanks = new Dictionary<string, int>(state.MiscPerkRanks),
+            FoundBobbleheads = new HashSet<string>(state.FoundBobbleheads),
+            MagazineStackCounts = new Dictionary<string, int>(state.MagazineStackCounts),
+            CollectedMagazineIssues = new HashSet<string>(state.CollectedMagazineIssues),
+            YoureSpecialCollected = state.YoureSpecialCollected,
+            YoureSpecialChoice = state.YoureSpecialChoice
+        };
 
         private void RecordLoggedAction(string description, Action apply)
         {
@@ -760,6 +835,7 @@ namespace FalloutPlanner.Games.Fallout4
 
             ActionLog.Insert(0, description);
             _actionStates.Insert(0, CaptureActionState());
+            IsDirty = true;
         }
 
         public void RecalculateDerivedStats()

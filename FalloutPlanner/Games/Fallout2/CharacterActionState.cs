@@ -10,5 +10,6 @@ namespace FalloutPlanner.Games.Fallout2
         public Dictionary<string, int> SkillBookCounts { get; set; } = new();
         /// <summary>Permanent % invested via skill points / books / perks (survives SPECIAL recalc).</summary>
         public Dictionary<string, int> SkillInvestment { get; set; } = new();
+        public HashSet<string> TaggedSkillNames { get; set; } = new();
     }
 }

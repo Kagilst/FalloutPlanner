@@ -87,5 +87,34 @@ namespace FalloutPlanner.Games.FalloutNV
                     NavigationService.GoBack();
             }
         }
+
+        private void Settings_Restart(object sender, RoutedEventArgs e)
+        {
+            Character.RevertToCreationState();
+            if (NavigationService?.CanGoBack == true)
+                NavigationService.GoBack();
+        }
+
+        private void Settings_Home(object sender, RoutedEventArgs e) =>
+            NavigationService?.Navigate(new FalloutPlanner.HomePage());
+
+        private void Settings_Save(object sender, RoutedEventArgs e)
+        {
+            FalloutPlanner.Saves.CharacterSaveService.TrySaveFalloutNV(Character, Window.GetWindow(this));
+        }
+
+        private void Settings_ExportGuide(object sender, RoutedEventArgs e)
+        {
+            FalloutPlanner.Saves.MarkdownGuideExporter.TryExportGeneric(
+                "Fallout New Vegas",
+                Character.Name,
+                Character.Level,
+                Character.GetSpecialLine(starting: true),
+                Character.GetSpecialLine(starting: false),
+                Character.GetTaggedSkillsLine(),
+                Character.ActionLog,
+                $"- Health: {Character.Health}\n- Skill Points: {Character.SkillPoints}",
+                Window.GetWindow(this));
+        }
     }
 }

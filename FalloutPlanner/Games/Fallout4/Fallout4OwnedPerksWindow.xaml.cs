@@ -13,6 +13,7 @@ namespace FalloutPlanner.Games.Fallout4
         private OwnedPerkInfo? _selectedOwned;
         private OwnedPerkInfo? _selectedMisc;
         private bool _selecting;
+        private bool _showMiscOnly;
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -21,6 +22,18 @@ namespace FalloutPlanner.Games.Fallout4
 
         public bool ShowOwnedEmpty => OwnedPerks.Count == 0;
         public bool ShowMiscEmpty => MiscPerks.Count == 0;
+
+        public bool ShowMiscOnly
+        {
+            get => _showMiscOnly;
+            set
+            {
+                if (_showMiscOnly == value) return;
+                _showMiscOnly = value;
+                OnPropertyChanged();
+                Refresh(preferOwned: SelectedOwnedPerk?.Name);
+            }
+        }
 
         public OwnedPerkInfo? SelectedOwnedPerk
         {
@@ -88,7 +101,11 @@ namespace FalloutPlanner.Games.Fallout4
         {
             OwnedPerks.Clear();
             foreach (var perk in _character.GetOwnedPerks())
+            {
+                if (_showMiscOnly && !perk.IsMiscPerk)
+                    continue;
                 OwnedPerks.Add(perk);
+            }
 
             MiscPerks.Clear();
             foreach (var perk in _character.GetAvailableMiscPerks())

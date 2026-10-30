@@ -5,8 +5,10 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using System.Windows.Navigation;
 using FalloutPlanner.Games.Fallout4.Perks;
+using FalloutPlanner.Saves;
 
 namespace FalloutPlanner.Games.Fallout4
 {
@@ -23,7 +25,7 @@ namespace FalloutPlanner.Games.Fallout4
             DataContext = character;
             Character.PropertyChanged += Character_PropertyChanged;
             RefreshPerkList();
-            UpdateChartSpecialHeader();
+            UpdateAttributeFilterHighlight();
         }
 
         private void Character_PropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -41,7 +43,6 @@ namespace FalloutPlanner.Games.Fallout4
             {
                 RefreshPerkListAvailability();
                 UpdateSelectedPerkDetails();
-                UpdateChartSpecialHeader();
             }
         }
 
@@ -53,26 +54,50 @@ namespace FalloutPlanner.Games.Fallout4
             if (Enum.TryParse<Fallout4SpecialAttribute>(btn.Tag.ToString(), out var attr))
             {
                 _filter = attr;
+                UpdateAttributeFilterHighlight();
                 RefreshPerkList();
-                UpdateChartSpecialHeader();
             }
         }
 
-        private void UpdateChartSpecialHeader()
+        private void UpdateAttributeFilterHighlight()
         {
-            int value = Character.GetSpecial(_filter);
-            ChartSpecialHeader.Text = $"{_filter} [{value}/10]";
-            ChartSpecialPlusButton.Tag = _filter.ToString();
-            ChartSpecialPlusButton.IsEnabled = Character.PerkPoints > 0 && value < Fallout4Character.MaxSpecialFromPoints;
-        }
-
-        private void ChartIncreaseSpecial_Click(object sender, RoutedEventArgs e)
-        {
-            if (Character.TryIncreaseSpecialWithPerkPoint(_filter.ToString()))
+            foreach (var child in AttributeFilterBar.Children)
             {
-                RefreshPerkListAvailability();
-                UpdateChartSpecialHeader();
+                if (child is not Button btn)
+                    continue;
+
+                bool selected = btn.Tag?.ToString() == _filter.ToString();
+                if (selected)
+                {
+                    btn.Background = (Brush)FindResource("FalloutAccentBrush");
+                    btn.Foreground = Brushes.Black;
+                }
+                else
+                {
+                    btn.ClearValue(Control.BackgroundProperty);
+                    btn.ClearValue(Control.ForegroundProperty);
+                }
             }
+        }
+
+        private void Settings_Restart(object sender, RoutedEventArgs e)
+        {
+            Character.RevertToCreationState();
+            if (NavigationService?.CanGoBack == true)
+                NavigationService.GoBack();
+        }
+
+        private void Settings_Home(object sender, RoutedEventArgs e) =>
+            NavigationService?.Navigate(new FalloutPlanner.HomePage());
+
+        private void Settings_Save(object sender, RoutedEventArgs e)
+        {
+            CharacterSaveService.TrySaveFallout4(Character, Window.GetWindow(this));
+        }
+
+        private void Settings_ExportGuide(object sender, RoutedEventArgs e)
+        {
+            MarkdownGuideExporter.TryExportFallout4(Character, Window.GetWindow(this));
         }
 
         private void RefreshPerkList()
@@ -88,7 +113,6 @@ namespace FalloutPlanner.Games.Fallout4
             var match = _perkItems.FirstOrDefault(p => p.Perk.Name == selectedName);
             PerkList.SelectedItem = match ?? _perkItems.FirstOrDefault();
             UpdateSelectedPerkDetails();
-            UpdateChartSpecialHeader();
         }
 
         private void RefreshPerkListAvailability()
@@ -96,7 +120,6 @@ namespace FalloutPlanner.Games.Fallout4
             foreach (var item in _perkItems)
                 item.Refresh(Character);
             UpdateSelectedPerkDetails();
-            UpdateChartSpecialHeader();
         }
 
         private PerkListItem CreatePerkItem(Fallout4Perk perk)
@@ -179,7 +202,6 @@ namespace FalloutPlanner.Games.Fallout4
             var window = new Fallout4BobbleheadsWindow(Character) { Owner = Window.GetWindow(this) };
             window.ShowDialog();
             RefreshPerkListAvailability();
-            UpdateChartSpecialHeader();
         }
 
         private void Magazines_Click(object sender, RoutedEventArgs e)
@@ -187,7 +209,6 @@ namespace FalloutPlanner.Games.Fallout4
             var window = new Fallout4MagazinesWindow(Character) { Owner = Window.GetWindow(this) };
             window.ShowDialog();
             RefreshPerkListAvailability();
-            UpdateChartSpecialHeader();
         }
 
         private void Perks_Click(object sender, RoutedEventArgs e)
@@ -206,6 +227,8 @@ namespace FalloutPlanner.Games.Fallout4
         public Fallout4Perk Perk { get; }
         public string DisplayName { get; private set; } = "";
         public bool CanTake { get; private set; }
+        public bool MeetsAttributeRequirement { get; private set; }
+        public double ListOpacity { get; private set; } = 1.0;
 
         public PerkListItem(Fallout4Perk perk)
         {
@@ -217,8 +240,12 @@ namespace FalloutPlanner.Games.Fallout4
             int owned = character.GetPerkRank(Perk.Name);
             DisplayName = $"{Perk.AttributeShort} {Perk.AttributeRequirement}  {Perk.Name}  [{owned}/{Perk.MaxRank}]";
             CanTake = character.CanTakeNextPerkRank(Perk);
+            MeetsAttributeRequirement = character.GetSpecial(Perk.Attribute) >= Perk.AttributeRequirement;
+            ListOpacity = MeetsAttributeRequirement ? 1.0 : 0.35;
             OnPropertyChanged(nameof(DisplayName));
             OnPropertyChanged(nameof(CanTake));
+            OnPropertyChanged(nameof(MeetsAttributeRequirement));
+            OnPropertyChanged(nameof(ListOpacity));
         }
     }
 }

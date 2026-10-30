@@ -1,7 +1,10 @@
 <Page x:Class="FalloutPlanner.Games.Fallout4.Fallout4LevelPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Title="Fallout 4 Level Page">
+      xmlns:controls="clr-namespace:FalloutPlanner.Controls"
+      Title="Fallout 4 Level Page"
+      MinWidth="720"
+      MinHeight="480">
 
     <Page.Resources>
         <ResourceDictionary>
@@ -11,225 +14,231 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="{DynamicResource FalloutBackgroundBrush}" MinWidth="900" MinHeight="520">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+    <controls:UniformScaleHost DesignWidth="1000" DesignHeight="600">
+        <Grid Background="{DynamicResource FalloutBackgroundBrush}">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <Border Grid.Row="0" Margin="20,16,20,8"
-                BorderBrush="{DynamicResource FalloutAccentBrush}"
-                BorderThickness="2" Padding="10">
-            <Grid>
+            <DockPanel Grid.Row="0" Margin="20,8,20,4" LastChildFill="True">
+                <controls:LevelSettingsButton x:Name="SettingsButton"
+                                              DockPanel.Dock="Right"
+                                              VerticalAlignment="Center"
+                                              RestartRequested="Settings_Restart"
+                                              HomeRequested="Settings_Home"
+                                              SaveRequested="Settings_Save"
+                                              ExportGuideRequested="Settings_ExportGuide"/>
+                <TextBlock Text="LEVEL"
+                           VerticalAlignment="Center"
+                           FontWeight="Bold"
+                           FontSize="16"
+                           Foreground="{DynamicResource FalloutAccentBrush}"/>
+            </DockPanel>
+
+            <Border Grid.Row="1" Margin="20,0,20,8"
+                    BorderBrush="{DynamicResource FalloutAccentBrush}"
+                    BorderThickness="2" Padding="10">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Character summary + history -->
+                    <DockPanel Grid.Column="0" Margin="0,0,10,0">
+                        <TextBlock DockPanel.Dock="Top" Text="STATS"
+                                   FontWeight="Bold" Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,8"/>
+                        <StackPanel DockPanel.Dock="Top">
+                            <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <TextBlock Text="Name" FontWeight="Bold"/><TextBlock Grid.Column="1" Text="{Binding Name}"/>
+                            </Grid>
+                            <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <TextBlock Text="Level" FontWeight="Bold"/><TextBlock Grid.Column="1" Text="{Binding Level}"/>
+                            </Grid>
+                            <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <TextBlock Text="Perk Points" FontWeight="Bold" Foreground="{DynamicResource FalloutAccentBrush}"/>
+                                <TextBlock Grid.Column="1" Text="{Binding PerkPoints}" Foreground="{DynamicResource FalloutAccentBrush}" FontWeight="Bold"/>
+                            </Grid>
+                            <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <TextBlock Text="Hit Points" FontWeight="Bold"/><TextBlock Grid.Column="1" Text="{Binding HitPoints}"/>
+                            </Grid>
+                            <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <TextBlock Text="Action Points" FontWeight="Bold"/><TextBlock Grid.Column="1" Text="{Binding ActionPoints}"/>
+                            </Grid>
+                            <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <TextBlock Text="Carry Weight" FontWeight="Bold"/><TextBlock Grid.Column="1" Text="{Binding CarryWeight}"/>
+                            </Grid>
+
+                            <TextBlock Text="S.P.E.C.I.A.L." FontWeight="Bold"
+                                       Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,12,0,4"/>
+                            <TextBlock TextWrapping="Wrap" FontSize="11" Margin="0,0,0,6" Opacity="0.85"
+                                       Text="Spend a perk point to raise a SPECIAL (max 10)."/>
+
+                            <Grid Margin="0,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Strength" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Strength}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
+                                        Tag="Strength" Click="IncreaseSpecial_Click"
+                                        IsEnabled="{Binding CanIncreaseStrengthPerk}"/>
+                            </Grid>
+                            <Grid Margin="0,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Perception" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Perception}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
+                                        Tag="Perception" Click="IncreaseSpecial_Click"
+                                        IsEnabled="{Binding CanIncreasePerceptionPerk}"/>
+                            </Grid>
+                            <Grid Margin="0,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Endurance" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Endurance}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
+                                        Tag="Endurance" Click="IncreaseSpecial_Click"
+                                        IsEnabled="{Binding CanIncreaseEndurancePerk}"/>
+                            </Grid>
+                            <Grid Margin="0,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Charisma" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Charisma}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
+                                        Tag="Charisma" Click="IncreaseSpecial_Click"
+                                        IsEnabled="{Binding CanIncreaseCharismaPerk}"/>
+                            </Grid>
+                            <Grid Margin="0,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Intelligence" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Intelligence}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
+                                        Tag="Intelligence" Click="IncreaseSpecial_Click"
+                                        IsEnabled="{Binding CanIncreaseIntelligencePerk}"/>
+                            </Grid>
+                            <Grid Margin="0,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Agility" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Agility}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
+                                        Tag="Agility" Click="IncreaseSpecial_Click"
+                                        IsEnabled="{Binding CanIncreaseAgilityPerk}"/>
+                            </Grid>
+                            <Grid Margin="0,3">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock Text="Luck" VerticalAlignment="Center" FontWeight="Bold"/>
+                                <TextBlock Grid.Column="1" Text="{Binding Luck}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
+                                        Tag="Luck" Click="IncreaseSpecial_Click"
+                                        IsEnabled="{Binding CanIncreaseLuckPerk}"/>
+                            </Grid>
+                        </StackPanel>
+
+                        <Border Margin="0,12,0,0" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="1" Padding="4">
+                            <DockPanel>
+                                <TextBlock DockPanel.Dock="Top" Text="History" FontWeight="Bold"
+                                           Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,4"/>
+                                <ListBox ItemsSource="{Binding ActionLog}"
+                                         Background="Transparent" BorderThickness="0"
+                                         Foreground="{DynamicResource FalloutTextBrush}"
+                                         FontSize="11"
+                                         ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+                            </DockPanel>
+                        </Border>
+                    </DockPanel>
+
+                    <!-- Perk chart -->
+                    <DockPanel Grid.Column="1">
+                        <TextBlock DockPanel.Dock="Top" Text="PERK CHART"
+                                   FontWeight="Bold" Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,6"/>
+
+                        <StackPanel x:Name="AttributeFilterBar" DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,6">
+                            <Button x:Name="FilterStrength" Content="STR" Margin="0,0,4,0" Padding="6,2" Tag="Strength" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
+                            <Button x:Name="FilterPerception" Content="PER" Margin="0,0,4,0" Padding="6,2" Tag="Perception" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
+                            <Button x:Name="FilterEndurance" Content="END" Margin="0,0,4,0" Padding="6,2" Tag="Endurance" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
+                            <Button x:Name="FilterCharisma" Content="CHR" Margin="0,0,4,0" Padding="6,2" Tag="Charisma" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
+                            <Button x:Name="FilterIntelligence" Content="INT" Margin="0,0,4,0" Padding="6,2" Tag="Intelligence" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
+                            <Button x:Name="FilterAgility" Content="AGI" Margin="0,0,4,0" Padding="6,2" Tag="Agility" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
+                            <Button x:Name="FilterLuck" Content="LCK" Margin="0,0,4,0" Padding="6,2" Tag="Luck" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
+                        </StackPanel>
+
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="1.1*"/>
+                                <RowDefinition Height="*" MinHeight="160"/>
+                            </Grid.RowDefinitions>
+
+                            <ListBox x:Name="PerkList"
+                                     Grid.Row="0"
+                                     SelectionChanged="PerkList_SelectionChanged"
+                                     Background="{DynamicResource FalloutPanelBrush}"
+                                     Foreground="{DynamicResource FalloutTextBrush}"
+                                     BorderBrush="{DynamicResource FalloutBorderBrush}">
+                                <ListBox.ItemTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding DisplayName}"
+                                                   Opacity="{Binding ListOpacity}"
+                                                   TextWrapping="NoWrap"/>
+                                    </DataTemplate>
+                                </ListBox.ItemTemplate>
+                            </ListBox>
+
+                            <Border Grid.Row="1" Margin="0,8,0,0" BorderBrush="{DynamicResource FalloutAccentBrush}"
+                                    BorderThickness="1" Padding="8">
+                                <DockPanel>
+                                    <Button x:Name="TakePerkButton" DockPanel.Dock="Right"
+                                            VerticalAlignment="Top" Content="Take Rank"
+                                            Margin="8,0,0,0" Padding="10,4"
+                                            Style="{StaticResource BoxButtons}"
+                                            Click="TakePerk_Click"/>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                                                  HorizontalScrollBarVisibility="Disabled">
+                                        <StackPanel>
+                                            <TextBlock x:Name="SelectedPerkTitle" FontWeight="Bold"
+                                                       Foreground="{DynamicResource FalloutAccentBrush}" TextWrapping="Wrap"/>
+                                            <TextBlock x:Name="SelectedPerkReqs" Margin="0,4,0,0" FontSize="11" TextWrapping="Wrap"/>
+                                            <TextBlock x:Name="SelectedPerkDesc" Margin="0,6,0,0" TextWrapping="Wrap"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </DockPanel>
+                            </Border>
+                        </Grid>
+                    </DockPanel>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Row="2" Margin="20,0,20,12">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="220"/>
-                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
-                <!-- SPECIAL (+ spends a perk point) -->
-                <DockPanel Grid.Column="0" Margin="0,0,10,0">
-                    <TextBlock DockPanel.Dock="Top" Text="S.P.E.C.I.A.L."
-                               FontWeight="Bold" Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,8"/>
-                    <TextBlock DockPanel.Dock="Top" TextWrapping="Wrap" FontSize="11" Margin="0,0,0,8" Opacity="0.85"
-                               Text="Spend a perk point to raise a SPECIAL (max 10)."/>
-
-                    <StackPanel>
-                        <Grid Margin="0,3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Strength" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Strength}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
-                                    Tag="Strength" Click="IncreaseSpecial_Click"
-                                    IsEnabled="{Binding CanIncreaseStrengthPerk}"/>
-                        </Grid>
-                        <Grid Margin="0,3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Perception" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Perception}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
-                                    Tag="Perception" Click="IncreaseSpecial_Click"
-                                    IsEnabled="{Binding CanIncreasePerceptionPerk}"/>
-                        </Grid>
-                        <Grid Margin="0,3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Endurance" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Endurance}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
-                                    Tag="Endurance" Click="IncreaseSpecial_Click"
-                                    IsEnabled="{Binding CanIncreaseEndurancePerk}"/>
-                        </Grid>
-                        <Grid Margin="0,3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Charisma" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Charisma}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
-                                    Tag="Charisma" Click="IncreaseSpecial_Click"
-                                    IsEnabled="{Binding CanIncreaseCharismaPerk}"/>
-                        </Grid>
-                        <Grid Margin="0,3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Intelligence" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Intelligence}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
-                                    Tag="Intelligence" Click="IncreaseSpecial_Click"
-                                    IsEnabled="{Binding CanIncreaseIntelligencePerk}"/>
-                        </Grid>
-                        <Grid Margin="0,3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Agility" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Agility}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
-                                    Tag="Agility" Click="IncreaseSpecial_Click"
-                                    IsEnabled="{Binding CanIncreaseAgilityPerk}"/>
-                        </Grid>
-                        <Grid Margin="0,3">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/><ColumnDefinition Width="28"/><ColumnDefinition Width="28"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Text="Luck" VerticalAlignment="Center" FontWeight="Bold"/>
-                            <TextBlock Grid.Column="1" Text="{Binding Luck}" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            <Button Grid.Column="2" Content="+" Style="{StaticResource SkillAdjustButton}"
-                                    Tag="Luck" Click="IncreaseSpecial_Click"
-                                    IsEnabled="{Binding CanIncreaseLuckPerk}"/>
-                        </Grid>
-                    </StackPanel>
-                </DockPanel>
-
-                <!-- Character summary + history -->
-                <DockPanel Grid.Column="1" Margin="0,0,10,0">
-                    <TextBlock DockPanel.Dock="Top" Text="STATS"
-                               FontWeight="Bold" Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,8"/>
-                    <StackPanel DockPanel.Dock="Top">
-                        <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <TextBlock Text="Name" FontWeight="Bold"/><TextBlock Grid.Column="1" Text="{Binding Name}"/>
-                        </Grid>
-                        <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <TextBlock Text="Level" FontWeight="Bold"/><TextBlock Grid.Column="1" Text="{Binding Level}"/>
-                        </Grid>
-                        <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <TextBlock Text="Perk Points" FontWeight="Bold" Foreground="{DynamicResource FalloutAccentBrush}"/>
-                            <TextBlock Grid.Column="1" Text="{Binding PerkPoints}" Foreground="{DynamicResource FalloutAccentBrush}" FontWeight="Bold"/>
-                        </Grid>
-                        <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <TextBlock Text="Hit Points" FontWeight="Bold"/><TextBlock Grid.Column="1" Text="{Binding HitPoints}"/>
-                        </Grid>
-                        <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <TextBlock Text="Action Points" FontWeight="Bold"/><TextBlock Grid.Column="1" Text="{Binding ActionPoints}"/>
-                        </Grid>
-                        <Grid Margin="0,2"><Grid.ColumnDefinitions><ColumnDefinition Width="90"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
-                            <TextBlock Text="Carry Weight" FontWeight="Bold"/><TextBlock Grid.Column="1" Text="{Binding CarryWeight}"/>
-                        </Grid>
-                    </StackPanel>
-
-                    <Border Margin="0,12,0,0" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="1" Padding="4">
-                        <DockPanel>
-                            <TextBlock DockPanel.Dock="Top" Text="History" FontWeight="Bold"
-                                       Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,4"/>
-                            <ListBox ItemsSource="{Binding ActionLog}"
-                                     Background="Transparent" BorderThickness="0"
-                                     Foreground="{DynamicResource FalloutTextBrush}"
-                                     FontSize="11"
-                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
-                        </DockPanel>
-                    </Border>
-                </DockPanel>
-
-                <!-- Perk chart -->
-                <DockPanel Grid.Column="2">
-                    <TextBlock DockPanel.Dock="Top" Text="PERK CHART"
-                               FontWeight="Bold" Foreground="{DynamicResource FalloutAccentBrush}" Margin="0,0,0,6"/>
-
-                    <StackPanel DockPanel.Dock="Top" Orientation="Horizontal" Margin="0,0,0,6">
-                        <Button Content="STR" Margin="0,0,4,0" Padding="6,2" Tag="Strength" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
-                        <Button Content="PER" Margin="0,0,4,0" Padding="6,2" Tag="Perception" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
-                        <Button Content="END" Margin="0,0,4,0" Padding="6,2" Tag="Endurance" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
-                        <Button Content="CHR" Margin="0,0,4,0" Padding="6,2" Tag="Charisma" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
-                        <Button Content="INT" Margin="0,0,4,0" Padding="6,2" Tag="Intelligence" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
-                        <Button Content="AGI" Margin="0,0,4,0" Padding="6,2" Tag="Agility" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
-                        <Button Content="LCK" Margin="0,0,4,0" Padding="6,2" Tag="Luck" Click="AttributeFilter_Click" Style="{StaticResource BoxButtons}"/>
-                    </StackPanel>
-
-                    <!-- SPECIAL at top of selected chart column -->
-                    <Border DockPanel.Dock="Top" Margin="0,0,0,8" Padding="8,6"
-                            BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="1"
-                            Background="{DynamicResource FalloutPanelBrush}">
-                        <DockPanel>
-                            <Button x:Name="ChartSpecialPlusButton" DockPanel.Dock="Right"
-                                    Content="+" Width="28" Height="28"
-                                    Style="{StaticResource SkillAdjustButton}"
-                                    Click="ChartIncreaseSpecial_Click"/>
-                            <TextBlock x:Name="ChartSpecialHeader"
-                                       VerticalAlignment="Center"
-                                       FontWeight="Bold"
-                                       FontSize="14"
-                                       Foreground="{DynamicResource FalloutAccentBrush}"/>
-                        </DockPanel>
-                    </Border>
-
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="*"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-
-                        <ListBox x:Name="PerkList"
-                                 Grid.Row="0"
-                                 DisplayMemberPath="DisplayName"
-                                 SelectionChanged="PerkList_SelectionChanged"
-                                 Background="{DynamicResource FalloutPanelBrush}"
-                                 Foreground="{DynamicResource FalloutTextBrush}"
-                                 BorderBrush="{DynamicResource FalloutBorderBrush}"/>
-
-                        <Border Grid.Row="1" Margin="0,8,0,0" BorderBrush="{DynamicResource FalloutAccentBrush}"
-                                BorderThickness="1" Padding="8">
-                            <DockPanel>
-                                <Button x:Name="TakePerkButton" DockPanel.Dock="Right" Content="Take Rank"
-                                        Margin="8,0,0,0" Padding="10,4"
-                                        Style="{StaticResource BoxButtons}"
-                                        Click="TakePerk_Click"/>
-                                <StackPanel>
-                                    <TextBlock x:Name="SelectedPerkTitle" FontWeight="Bold"
-                                               Foreground="{DynamicResource FalloutAccentBrush}" TextWrapping="Wrap"/>
-                                    <TextBlock x:Name="SelectedPerkReqs" Margin="0,4,0,0" FontSize="11" TextWrapping="Wrap"/>
-                                    <TextBlock x:Name="SelectedPerkDesc" Margin="0,6,0,0" TextWrapping="Wrap"/>
-                                </StackPanel>
-                            </DockPanel>
-                        </Border>
-                    </Grid>
-                </DockPanel>
+                <Button Grid.Column="0" Content="Undo" Margin="4" Style="{StaticResource BoxButtons}" Click="Undo_Click"/>
+                <Button Grid.Column="1" Content="Equipment" Margin="4" Style="{StaticResource BoxButtons}" Click="Equipment_Click"/>
+                <Button Grid.Column="2" Content="Bobbleheads" Margin="4" Style="{StaticResource BoxButtons}" Click="Bobbleheads_Click"/>
+                <Button Grid.Column="3" Content="Magazines" Margin="4" Style="{StaticResource BoxButtons}" Click="Magazines_Click"/>
+                <Button Grid.Column="4" Content="Perks" Margin="4" Style="{StaticResource BoxButtons}" Click="Perks_Click"/>
+                <Button Grid.Column="5" Content="Level Up" Margin="4" Style="{StaticResource BoxButtons}"
+                        IsEnabled="{Binding CanLevelUp}" Click="LevelUp_Click"/>
             </Grid>
-        </Border>
-
-        <Grid Grid.Row="1" Margin="20,0,20,12">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <Button Grid.Column="0" Content="Undo" Margin="4" Style="{StaticResource BoxButtons}" Click="Undo_Click"/>
-            <Button Grid.Column="1" Content="Equipment" Margin="4" Style="{StaticResource BoxButtons}" Click="Equipment_Click"/>
-            <Button Grid.Column="2" Content="Bobbleheads" Margin="4" Style="{StaticResource BoxButtons}" Click="Bobbleheads_Click"/>
-            <Button Grid.Column="3" Content="Magazines" Margin="4" Style="{StaticResource BoxButtons}" Click="Magazines_Click"/>
-            <Button Grid.Column="4" Content="Perks" Margin="4" Style="{StaticResource BoxButtons}" Click="Perks_Click"/>
-            <Button Grid.Column="5" Content="Level Up" Margin="4" Style="{StaticResource BoxButtons}"
-                    IsEnabled="{Binding CanLevelUp}" Click="LevelUp_Click"/>
         </Grid>
-    </Grid>
+    </controls:UniformScaleHost>
 </Page>

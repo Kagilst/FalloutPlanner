@@ -1,7 +1,10 @@
 <Page x:Class="FalloutPlanner.Games.FalloutNV.FalloutNVLevelPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Title="Fallout New Vegas Level Page">
+      xmlns:controls="clr-namespace:FalloutPlanner.Controls"
+      Title="Fallout New Vegas Level Page"
+      MinWidth="520"
+      MinHeight="360">
 
     <Page.Resources>
         <ResourceDictionary>
@@ -11,25 +14,29 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="{DynamicResource FalloutBackgroundBrush}" MinWidth="608" MinHeight="372">
+    <controls:UniformScaleHost DesignWidth="800" DesignHeight="500">
+    <Grid Background="{DynamicResource FalloutBackgroundBrush}">
         <Grid.RowDefinitions>
-            <!-- Main Content -->
+            <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
-            <!-- Button Bar -->
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
 
-        <!-- Stats label top left -->
-        <TextBlock Text="Stats"
-                   Margin="30,10,0,0"
-                   HorizontalAlignment="Left"
-                   VerticalAlignment="Top"
-                   FontSize="16"
-                   FontWeight="Bold" 
-                   Grid.Row="0"/>
+        <DockPanel Grid.Row="0" Margin="30,8,30,4" LastChildFill="True">
+            <controls:LevelSettingsButton DockPanel.Dock="Right"
+                                          VerticalAlignment="Center"
+                                          RestartRequested="Settings_Restart"
+                                          HomeRequested="Settings_Home"
+                                          SaveRequested="Settings_Save"
+                                          ExportGuideRequested="Settings_ExportGuide"/>
+            <TextBlock Text="Stats"
+                       VerticalAlignment="Center"
+                       FontSize="16"
+                       FontWeight="Bold"/>
+        </DockPanel>
 
         <!-- Amber Frame -->
-        <Border Margin="30,31,30,41" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="5" Grid.Row="0">
+        <Border Margin="30,0,30,8" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="5" Grid.Row="1">
             <Grid Margin="5" x:Name="StatsPanel" VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
 
                 <!-- 13 rows -->
@@ -56,13 +63,13 @@
                     <!-- SPECIAL Values -->
                     <ColumnDefinition Width="Auto" />
                     <!-- Spacer between SPECIAL and Stats -->
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="12" />
                     <!-- Character Stats Labels -->
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto" MinWidth="140"/>
                     <!-- Character Stats Values -->
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" MinWidth="48" />
                     <!-- Spacer between Stats and Skills -->
-                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="16" />
                     <!-- Skill Labels -->
                     <ColumnDefinition Width="*" />
                     <!-- Skill Decrease Buttons -->
@@ -222,8 +229,8 @@
         </Border>
         
         <!-- Buttons -->
-        <Grid Grid.Row="1"
-              Margin="30,-35,30,10">
+        <Grid Grid.Row="2"
+              Margin="30,0,30,10">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
@@ -273,4 +280,5 @@
         </Grid>
 
     </Grid>
+    </controls:UniformScaleHost>
 </Page>

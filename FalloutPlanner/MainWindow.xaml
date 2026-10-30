@@ -5,7 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:FalloutPlanner"
         mc:Ignorable="d"
-        Title="Fallout Planner" Height="450" Width="800" WindowStartupLocation="CenterScreen">
+        Title="Fallout Planner"
+        Height="560"
+        Width="960"
+        MinWidth="720"
+        MinHeight="450"
+        WindowStartupLocation="CenterScreen">
     <Grid Background="{DynamicResource FalloutBackgroundBrush}">
         <!-- Frame hosts all pages so only one is visible at a time -->
         <Frame x:Name="MainFrame"

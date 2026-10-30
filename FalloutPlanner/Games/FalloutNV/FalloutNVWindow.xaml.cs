@@ -60,6 +60,28 @@ public partial class FalloutNVWindow : Page
         }
     }
 
+    private void Characters_Click(object sender, RoutedEventArgs e)
+    {
+        var browser = new FalloutPlanner.Saves.SavedCharactersWindow(FalloutPlanner.Saves.GameIds.FalloutNV)
+        {
+            Owner = Window.GetWindow(this)
+        };
+        if (browser.ShowDialog() != true || browser.SelectedSave == null)
+            return;
+
+        var file = FalloutPlanner.Saves.CharacterSaveService.SharedRepository
+            .Load(FalloutPlanner.Saves.GameIds.FalloutNV, browser.SelectedSave.Id);
+        if (file == null)
+        {
+            MessageBox.Show(Window.GetWindow(this), "Could not load that save.", "Saved Characters",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        var loaded = FalloutPlanner.Saves.Adapters.FalloutNVSaveAdapter.FromFile(file);
+        NavigationService?.Navigate(new FalloutPlanner.Games.FalloutNV.FalloutNVLevelPage(loaded));
+    }
+
     // Modify SPECIAL
     private void ModifySpecial_Click(object sender, RoutedEventArgs e)
     {

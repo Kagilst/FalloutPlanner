@@ -15,6 +15,7 @@ namespace FalloutPlanner.Games.Fallout3.Perks
         public string Name { get; set; }
         public string DisplayName { get; set; }
         public string Description { get; set; }
+        [System.Text.Json.Serialization.JsonIgnore]
         public Fallout3Perk Perk { get; set; }
         public string ChoiceDetail { get; set; }
     }

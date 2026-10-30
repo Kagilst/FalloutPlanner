@@ -1,7 +1,10 @@
 <Page x:Class="FalloutPlanner.Fallout2Window"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-      Title="Fallout 2">
+      xmlns:controls="clr-namespace:FalloutPlanner.Controls"
+      Title="Fallout 2"
+      MinWidth="560"
+      MinHeight="400">
 
     <!-- Merge FO2 resources -->
     <Page.Resources>
@@ -12,9 +15,8 @@
         </ResourceDictionary>
     </Page.Resources>
 
-    <Grid Background="{DynamicResource FalloutBackgroundBrush}"
-          MinWidth="720"
-          MinHeight="500">
+    <controls:UniformScaleHost DesignWidth="820" DesignHeight="520">
+    <Grid Background="{DynamicResource FalloutBackgroundBrush}">
         <!-- Return Button Bottom Left -->
         <Button Content="Return"
                 Margin="30,0,0,10"
@@ -33,8 +35,16 @@
                    FontWeight="Bold"
                    Foreground="{StaticResource FalloutAccentBrush}"/>
 
+        <Button Content="Characters"
+                Margin="0,8,30,0"
+                Padding="12,4"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Style="{StaticResource BoxButtons}"
+                Click="Characters_Click"/>
+
         <!-- Main Frame -->
-        <Border Margin="30,35,30,45" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="8">
+        <Border Margin="30,40,30,45" BorderBrush="{DynamicResource FalloutAccentBrush}" BorderThickness="2" Padding="8">
             <Grid x:Name="MainPanel">
                 <Grid.ColumnDefinitions>
                     <!-- SPECIAL Column -->
@@ -223,68 +233,69 @@
                     
                     <Grid Grid.Row="1" x:Name="SkillsPanel">
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*"/>
-                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*" MinWidth="150"/>
+                            <ColumnDefinition Width="16"/>
+                            <ColumnDefinition Width="*" MinWidth="150"/>
                         </Grid.ColumnDefinitions>
                         
                         <!-- Left column skills -->
-                        <StackPanel Grid.Column="0">
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="0" Margin="0,0,4,0">
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="SmallGuns" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Small Guns:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding SmallGuns, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="BigGuns" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Big Guns:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding BigGuns, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="EnergyWeapons" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Energy:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding EnergyWeapons, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Unarmed" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Unarmed:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Unarmed, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="MeleeWeapons" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Melee:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding MeleeWeapons, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Throwing" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Throwing:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Throwing, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="FirstAid" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="First Aid:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding FirstAid, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Doctor" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Doctor:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Doctor, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Sneak" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Sneak:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Sneak, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
                         </StackPanel>
                         
                         <!-- Right column skills -->
-                        <StackPanel Grid.Column="1">
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                        <StackPanel Grid.Column="2" Margin="4,0,0,0">
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Lockpick" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Lockpick:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Lockpick, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Steal" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Steal:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Steal, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Traps" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Traps:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Traps, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Science" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Science:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Science, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Repair" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Repair:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Repair, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Speech" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Speech:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Speech, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Barter" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Barter:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Barter, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Gambling" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Gambling:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Gambling, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
-                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="90"/><ColumnDefinition Width="40"/></Grid.ColumnDefinitions>
+                            <Grid Margin="0,1"><Grid.ColumnDefinitions><ColumnDefinition Width="Auto"/><ColumnDefinition Width="*"/><ColumnDefinition Width="Auto" MinWidth="36"/></Grid.ColumnDefinitions>
                                 <ToggleButton Tag="Outdoorsman" Style="{StaticResource TAG}" Checked="TagSkill_Toggled" Unchecked="TagSkill_Toggled"/>
                                 <TextBlock Text="Outdoorsman:" Grid.Column="1" FontWeight="Bold"/><TextBlock Text="{Binding Outdoorsman, StringFormat={}{0}%}" Grid.Column="2"/></Grid>
                         </StackPanel>
@@ -303,5 +314,6 @@
                 Padding="12,4" 
                 IsEnabled="{Binding CanConfirm}"/>
     </Grid>
+    </controls:UniformScaleHost>
 </Page>
 

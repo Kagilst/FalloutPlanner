@@ -80,5 +80,34 @@ namespace FalloutPlanner.Games.Fallout2
                     NavigationService.GoBack();
             }
         }
+
+        private void Settings_Restart(object sender, RoutedEventArgs e)
+        {
+            Character.RevertToCreationState();
+            if (NavigationService?.CanGoBack == true)
+                NavigationService.GoBack();
+        }
+
+        private void Settings_Home(object sender, RoutedEventArgs e) =>
+            NavigationService?.Navigate(new FalloutPlanner.HomePage());
+
+        private void Settings_Save(object sender, RoutedEventArgs e)
+        {
+            FalloutPlanner.Saves.CharacterSaveService.TrySaveFallout2(Character, Window.GetWindow(this));
+        }
+
+        private void Settings_ExportGuide(object sender, RoutedEventArgs e)
+        {
+            FalloutPlanner.Saves.MarkdownGuideExporter.TryExportGeneric(
+                "Fallout 2",
+                Character.Name,
+                Character.Level,
+                Character.GetSpecialLine(starting: true),
+                Character.GetSpecialLine(starting: false),
+                Character.GetTaggedSkillsLine(),
+                Character.ActionLog,
+                $"- Hit Points: {Character.HitPoints}\n- Skill Points: {Character.SkillPoints}",
+                Window.GetWindow(this));
+        }
     }
 }

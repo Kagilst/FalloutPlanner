@@ -58,6 +58,35 @@ public partial class Fallout1LevelPage : Page
         UpdateNextPerkLevel();
     }
 
+    private void Settings_Restart(object sender, RoutedEventArgs e)
+    {
+        _character.RevertToCreationState();
+        if (NavigationService?.CanGoBack == true)
+            NavigationService.GoBack();
+    }
+
+    private void Settings_Home(object sender, RoutedEventArgs e) =>
+        NavigationService?.Navigate(new FalloutPlanner.HomePage());
+
+    private void Settings_Save(object sender, RoutedEventArgs e)
+    {
+        FalloutPlanner.Saves.CharacterSaveService.TrySaveFallout1(_character, Window.GetWindow(this));
+    }
+
+    private void Settings_ExportGuide(object sender, RoutedEventArgs e)
+    {
+        FalloutPlanner.Saves.MarkdownGuideExporter.TryExportGeneric(
+            "Fallout 1",
+            _character.Name,
+            _character.Level,
+            _character.GetSpecialLine(starting: true),
+            _character.GetSpecialLine(starting: false),
+            _character.GetTaggedSkillsLine(),
+            _character.ActionLog,
+            $"- Hit Points: {_character.HitPoints}\n- Skill Points: {_character.SkillPoints}",
+            Window.GetWindow(this));
+    }
+
     private void Equipment_Click(object sender, RoutedEventArgs e)
     {
         var equipmentWindow = new Fallout1EquipmentWindow();

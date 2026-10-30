@@ -15,5 +15,6 @@ namespace FalloutPlanner.Games.FalloutNV
         public HashSet<string> SkillBookLocations { get; set; } = new();
         /// <summary>Maps crate number (1-4) to number of books found in that crate.</summary>
         public Dictionary<int, int> WorkbenchCrates { get; set; } = new();
+        public HashSet<string> TaggedSkillNames { get; set; } = new();
     }
 }
